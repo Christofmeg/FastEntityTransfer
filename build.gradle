@@ -40,7 +40,7 @@ sourceSets {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
+	minecraft 'net.minecraftforge:forge:1.18-38.0.17'
 }
 
 jar {
