@@ -32,9 +32,9 @@ public class FactorioFastEntitytransferEvent {
 	@SuppressWarnings({ "resource", })
 	@SubscribeEvent
 	public static void FastEntitytransfer(final PlayerInteractEvent.LeftClickBlock event) {
-		Level level = event.getLevel();
+		Player player = (Player) event.getEntity();
+		Level level = player.getLevel();
 		BlockPos pos = event.getPos();
-		Player player = event.getEntity();
 		InteractionHand hand = event.getHand();
 		ItemStack stack = player.getItemInHand(hand);
 		boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
@@ -75,7 +75,7 @@ public class FactorioFastEntitytransferEvent {
 	private static void doInteractions(BlockEntity blockEntity, RecipeType<?> recipeType, Optional<?> optional,
 			Optional<?> inputSlotOptional, final LeftClickBlock event) {
 		AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-		Player player = event.getEntity();
+		Player player = (Player) event.getEntity();
 		InteractionHand hand = event.getHand();
 		ItemStack stack = player.getItemInHand(hand);
 		Item item = stack.getItem();
