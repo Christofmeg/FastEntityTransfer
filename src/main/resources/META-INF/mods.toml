@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[40,)"
 issueTrackerURL="https://github.com/Christofmeg/FastEntityTransfer/issues" #optional
 license="MIT License https://github.com/Christofmeg/FastEntityTransfer/blob/1.19.X/LICENSE"
 [[mods]]
 modId="fastentitytransfer"
-version="1.19.x-1.0.0"
+version="1.18.2-1.0.0"
 displayName="Fast Entity Transfer"
 displayURL="https://github.com/Christofmeg/FastEntityTransfer" #optional
 logoFile="pack.png"
@@ -16,12 +16,12 @@ Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items 
 [[dependencies.fastentitytransfer]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.fastentitytransfer]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
