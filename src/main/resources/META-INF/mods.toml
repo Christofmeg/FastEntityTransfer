@@ -10,9 +10,7 @@ displayURL="https://github.com/Christofmeg/FastEntityTransfer" #optional
 logoFile="pack.png"
 #credits=""
 authors="Christofmeg"
-description='''
-Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items that are suitable for Blasting/Smelting/Smoking.
-'''
+description="Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items that are suitable for Blasting/Smelting/Smoking."
 [[dependencies.fastentitytransfer]]
     modId="forge"
     mandatory=true
