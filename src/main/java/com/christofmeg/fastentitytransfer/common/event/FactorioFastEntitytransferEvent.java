@@ -96,19 +96,19 @@ public class FactorioFastEntitytransferEvent {
 
         // if input slot has items blasting/smelting/smoking recipe, give them to player
         if (inputSlotHasItemStack && !inputSlotOptional.isPresent()) {
-            player.inventory.add(inputStackSize, inputSlot);
+            player.addItemStackToInventory(inputSlot);
             inputSlot.setCount(0);
         }
 
         // if fuel slot has items without burntime, give them to player
         if (fuelBurnTime == 0) {
-            player.inventory.add(fuelStackSize, fuelSlot);
+            player.addItemStackToInventory(fuelSlot);
             fuelSlot.setCount(0);
         }
 
         // if output slot has items results, give them to player
         if (outputSlotHasItemStack) {
-            player.inventory.add(outputSlot.getCount(), outputSlot);
+            player.addItemStackToInventory(outputSlot);
         }
 
         // award experience
