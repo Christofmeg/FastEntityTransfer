@@ -3,7 +3,6 @@ package com.christofmeg.fastentitytransfer.common.event;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -29,6 +28,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(modid = "fastentitytransfer", bus = EventBusSubscriber.Bus.FORGE)
 public class FactorioFastEntitytransferEvent {
 
+    @SuppressWarnings("resource")
     @SubscribeEvent
     public static void FastEntitytransfer(final PlayerInteractEvent.LeftClickBlock event) {
         PlayerEntity player = (PlayerEntity) event.getEntity();
@@ -36,9 +36,9 @@ public class FactorioFastEntitytransferEvent {
         BlockPos pos = event.getPos();
         Hand hand = event.getHand();
         ItemStack stack = player.getHeldItem(hand);
-        boolean isSprintKeyDown = InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 2);
+        boolean isSprintKeyDown = Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown();
         TileEntity blockEntity = level.getTileEntity(pos);
-        if (level.isRemote && isSprintKeyDown) {
+        if (!level.isRemote && isSprintKeyDown) {
             if (blockEntity instanceof AbstractFurnaceTileEntity) {
                 AbstractFurnaceTileEntity abstractBlockEntity = ((AbstractFurnaceTileEntity) blockEntity);
                 IRecipeType<FurnaceRecipe> recipeType = IRecipeType.SMELTING;
