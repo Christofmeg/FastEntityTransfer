@@ -69,7 +69,6 @@ public class FactorioFastEntitytransferEvent {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private static void doInteractions(TileEntity blockEntity, IRecipeType<?> recipeType, Optional<?> optional,
             Optional<?> inputSlotOptional, final LeftClickBlock event) {
         AbstractFurnaceTileEntity abstractBlockEntity = ((AbstractFurnaceTileEntity) blockEntity);
@@ -112,7 +111,7 @@ public class FactorioFastEntitytransferEvent {
         }
 
         // award experience
-        abstractBlockEntity.func_235645_d_(player);
+        abstractBlockEntity.func_213995_d(player);
 
         // if item in hand is fuel without a smelting result
         if (burnTime != 0) {
