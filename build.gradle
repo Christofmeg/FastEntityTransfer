@@ -5,11 +5,11 @@ plugins {
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = '1.17.1-1.0.0'
+version = '1.16.x-1.0.0'
 group = 'com.christofmeg.${mod_name}'
 archivesBaseName = 'fastentitytransfer'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
@@ -40,7 +40,7 @@ sourceSets {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.17.1-37.1.1'
+	minecraft 'net.minecraftforge:forge:1.16.2-33.0.61'
 }
 
 jar {
