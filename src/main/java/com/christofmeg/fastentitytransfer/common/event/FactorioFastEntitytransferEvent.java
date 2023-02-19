@@ -33,7 +33,7 @@ public class FactorioFastEntitytransferEvent {
     @SubscribeEvent
     public static void FastEntitytransfer(final PlayerInteractEvent.LeftClickBlock event) {
         Player player = (Player) event.getEntity();
-        Level level = player.getLevel();
+        Level level = event.getWorld();
         BlockPos pos = event.getPos();
         InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
