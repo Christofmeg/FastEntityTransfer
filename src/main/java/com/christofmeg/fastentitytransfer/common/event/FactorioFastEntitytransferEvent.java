@@ -69,6 +69,7 @@ public class FactorioFastEntitytransferEvent {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static void doInteractions(TileEntity blockEntity, IRecipeType<?> recipeType, Optional<?> optional,
             Optional<?> inputSlotOptional, final LeftClickBlock event) {
         AbstractFurnaceTileEntity abstractBlockEntity = ((AbstractFurnaceTileEntity) blockEntity);
