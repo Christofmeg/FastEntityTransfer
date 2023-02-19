@@ -3,23 +3,23 @@ package com.christofmeg.fastentitytransfer.common.event;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.BlastingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.item.crafting.SmokingRecipe;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SmokerBlockEntity;
+import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.BlastingRecipe;
+import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.SmokingRecipe;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.BlastFurnaceTileEntity;
+import net.minecraft.tileentity.SmokerTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
@@ -29,67 +29,64 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(modid = "fastentitytransfer", bus = EventBusSubscriber.Bus.FORGE)
 public class FactorioFastEntitytransferEvent {
 
-    @SuppressWarnings({ "resource", })
     @SubscribeEvent
     public static void FastEntitytransfer(final PlayerInteractEvent.LeftClickBlock event) {
-        Player player = (Player) event.getEntity();
-        Level level = event.getWorld();
+        PlayerEntity player = (PlayerEntity) event.getEntity();
+        World level = event.getWorld();
         BlockPos pos = event.getPos();
-        InteractionHand hand = event.getHand();
-        ItemStack stack = player.getItemInHand(hand);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (!level.isClientSide() && isSprintKeyDown) {
-
-            if (blockEntity instanceof AbstractFurnaceBlockEntity) {
-                AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-                RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
+        Hand hand = event.getHand();
+        ItemStack stack = player.getHeldItem(hand);
+        boolean isSprintKeyDown = InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 2);
+        TileEntity blockEntity = level.getTileEntity(pos);
+        if (level.isRemote && isSprintKeyDown) {
+            if (blockEntity instanceof AbstractFurnaceTileEntity) {
+                AbstractFurnaceTileEntity abstractBlockEntity = ((AbstractFurnaceTileEntity) blockEntity);
+                IRecipeType<FurnaceRecipe> recipeType = IRecipeType.SMELTING;
                 doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(abstractBlockEntity.getItem(0)), level),
+                        level.getRecipeManager().getRecipe(recipeType, new Inventory(stack), level),
+                        level.getRecipeManager().getRecipe(recipeType,
+                                new Inventory(abstractBlockEntity.getStackInSlot(0)), level),
                         event);
             }
-            if (blockEntity instanceof SmokerBlockEntity) {
-                SmokerBlockEntity smokerBlockEntity = ((SmokerBlockEntity) blockEntity);
-                RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
+            if (blockEntity instanceof SmokerTileEntity) {
+                SmokerTileEntity smokerBlockEntity = ((SmokerTileEntity) blockEntity);
+                IRecipeType<SmokingRecipe> recipeType = IRecipeType.SMOKING;
                 doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(smokerBlockEntity.getItem(0)), level),
+                        level.getRecipeManager().getRecipe(recipeType, new Inventory(stack), level),
+                        level.getRecipeManager().getRecipe(recipeType,
+                                new Inventory(smokerBlockEntity.getStackInSlot(0)), level),
                         event);
             }
-            if (blockEntity instanceof BlastFurnaceBlockEntity) {
-                BlastFurnaceBlockEntity smokerBlockEntity = ((BlastFurnaceBlockEntity) blockEntity);
-                RecipeType<BlastingRecipe> recipeType = RecipeType.BLASTING;
+            if (blockEntity instanceof BlastFurnaceTileEntity) {
+                BlastFurnaceTileEntity smokerBlockEntity = ((BlastFurnaceTileEntity) blockEntity);
+                IRecipeType<BlastingRecipe> recipeType = IRecipeType.BLASTING;
                 doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(smokerBlockEntity.getItem(0)), level),
+                        level.getRecipeManager().getRecipe(recipeType, new Inventory(stack), level),
+                        level.getRecipeManager().getRecipe(recipeType,
+                                new Inventory(smokerBlockEntity.getStackInSlot(0)), level),
                         event);
             }
         }
     }
 
-    private static void doInteractions(BlockEntity blockEntity, RecipeType<?> recipeType, Optional<?> optional,
+    private static void doInteractions(TileEntity blockEntity, IRecipeType<?> recipeType, Optional<?> optional,
             Optional<?> inputSlotOptional, final LeftClickBlock event) {
-        AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-        Player player = (Player) event.getEntity();
-        InteractionHand hand = event.getHand();
-        ItemStack stack = player.getItemInHand(hand);
+        AbstractFurnaceTileEntity abstractBlockEntity = ((AbstractFurnaceTileEntity) blockEntity);
+        PlayerEntity player = (PlayerEntity) event.getEntity();
+        Hand hand = event.getHand();
+        ItemStack stack = player.getHeldItem(hand);
         Item item = stack.getItem();
-        ItemStack inputSlot = abstractBlockEntity.getItem(0);
-        ItemStack fuelSlot = abstractBlockEntity.getItem(1);
-        ItemStack outputSlot = abstractBlockEntity.getItem(2);
+        ItemStack inputSlot = abstractBlockEntity.getStackInSlot(0);
+        ItemStack fuelSlot = abstractBlockEntity.getStackInSlot(1);
+        ItemStack outputSlot = abstractBlockEntity.getStackInSlot(2);
         ItemStack newItemStack = new ItemStack(item);
         Item inputSlotItem = inputSlot.getItem();
         Item fuelSlotItem = fuelSlot.getItem();
         boolean inputSlotHasItemStack = !inputSlot.isEmpty();
         boolean outputSlotHasItemStack = !outputSlot.isEmpty();
         boolean fuelSlotHasItemStack = !fuelSlot.isEmpty();
-        int burnTime = ForgeHooks.getBurnTime(stack, recipeType);
-        int fuelBurnTime = ForgeHooks.getBurnTime(fuelSlot, recipeType);
+        int burnTime = ForgeHooks.getBurnTime(stack);
+        int fuelBurnTime = ForgeHooks.getBurnTime(fuelSlot);
         int inputMaxStackSize = inputSlot.getMaxStackSize();
         int inputStackSize = inputSlot.getCount();
         int fuelMaxStackSize = fuelSlot.getMaxStackSize();
@@ -98,22 +95,23 @@ public class FactorioFastEntitytransferEvent {
 
         // if input slot has items blasting/smelting/smoking recipe, give them to player
         if (inputSlotHasItemStack && !inputSlotOptional.isPresent()) {
-            player.getInventory().add(inputSlot);
+            player.inventory.add(inputStackSize, inputSlot);
             inputSlot.setCount(0);
         }
 
         // if fuel slot has items without burntime, give them to player
         if (fuelBurnTime == 0) {
-            player.getInventory().add(fuelSlot);
+            player.inventory.add(fuelStackSize, fuelSlot);
             fuelSlot.setCount(0);
         }
 
         // if output slot has items results, give them to player
         if (outputSlotHasItemStack) {
-            player.getInventory().add(outputSlot);
+            player.inventory.add(outputSlot.getCount(), outputSlot);
         }
 
-        abstractBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) player);
+        // award experience
+        abstractBlockEntity.func_235645_d_(player);
 
         // if item in hand is fuel without a smelting result
         if (burnTime != 0) {
@@ -121,7 +119,7 @@ public class FactorioFastEntitytransferEvent {
             // if fuel slot is empty, fill it with item in hand
             if (fuelSlot.isEmpty()) {
                 newItemStack.setCount(stackSize);
-                abstractBlockEntity.setItem(1, newItemStack);
+                abstractBlockEntity.setInventorySlotContents(1, newItemStack);
                 if (!player.isCreative()) {
                     stack.shrink(stackSize);
                 }
@@ -137,7 +135,7 @@ public class FactorioFastEntitytransferEvent {
                     // keep the rest in player inventory
                     if ((fuelStackSize + stackSize) > fuelMaxStackSize) {
                         newItemStack.setCount(fuelMaxStackSize);
-                        abstractBlockEntity.setItem(1, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(1, newItemStack);
                         if (!player.isCreative()) {
                             stack.setCount((fuelStackSize + stackSize) - fuelMaxStackSize);
                         }
@@ -146,7 +144,7 @@ public class FactorioFastEntitytransferEvent {
                     // if item in fuel slot is the same, merge the stacks
                     else {
                         newItemStack.setCount(fuelStackSize + stackSize);
-                        abstractBlockEntity.setItem(1, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(1, newItemStack);
 
                         if (!player.isCreative()) {
                             stack.shrink(stackSize);
@@ -157,13 +155,13 @@ public class FactorioFastEntitytransferEvent {
 
                 // Insert smeltable fuel in input slot if fuel slot is already full of it
                 else if (optional.isPresent()) {
-                    ItemStack resultItem = ((AbstractCookingRecipe) optional.get()).getResultItem();
+                    ItemStack resultItem = ((AbstractCookingRecipe) optional.get()).getRecipeOutput();
                     if (!resultItem.isEmpty()) {
 
                         // if input slot empty and fuel slot full, put smeltable fuel in input slot
                         if (inputSlot.isEmpty()) {
                             newItemStack.setCount(inputStackSize + stackSize);
-                            abstractBlockEntity.setItem(0, newItemStack);
+                            abstractBlockEntity.setInventorySlotContents(0, newItemStack);
 
                             if (!player.isCreative()) {
                                 stack.shrink(stackSize);
@@ -177,7 +175,7 @@ public class FactorioFastEntitytransferEvent {
                             // keep the rest in player inventory
                             if ((inputStackSize + stackSize) > inputMaxStackSize) {
                                 newItemStack.setCount(inputMaxStackSize);
-                                abstractBlockEntity.setItem(0, newItemStack);
+                                abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                                 if (!player.isCreative()) {
                                     stack.setCount((inputStackSize + stackSize) - inputMaxStackSize);
                                 }
@@ -186,7 +184,7 @@ public class FactorioFastEntitytransferEvent {
                             // if item in slot is the same, merge the stacks
                             else {
                                 newItemStack.setCount(inputStackSize + stackSize);
-                                abstractBlockEntity.setItem(0, newItemStack);
+                                abstractBlockEntity.setInventorySlotContents(0, newItemStack);
 
                                 if (!player.isCreative()) {
                                     stack.shrink(stackSize);
@@ -204,10 +202,10 @@ public class FactorioFastEntitytransferEvent {
             // in input slot
             else if (fuelSlotHasItemStack && inputSlot.isEmpty()) {
                 if (optional.isPresent()) {
-                    ItemStack resultItem = ((AbstractCookingRecipe) optional.get()).getResultItem();
+                    ItemStack resultItem = ((AbstractCookingRecipe) optional.get()).getRecipeOutput();
                     if (!resultItem.isEmpty()) {
                         newItemStack.setCount(stackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                         if (!player.isCreative()) {
                             stack.shrink(stackSize);
                         }
@@ -226,7 +224,7 @@ public class FactorioFastEntitytransferEvent {
                     // keep the rest in player inventory
                     if (inputStackSize + stackSize > inputMaxStackSize) {
                         newItemStack.setCount(inputMaxStackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                         if (!player.isCreative()) {
                             stack.setCount(inputStackSize + stackSize - inputMaxStackSize);
                         }
@@ -235,7 +233,7 @@ public class FactorioFastEntitytransferEvent {
                     // if item in input slot and inventory are the same, merge the stacks
                     else {
                         newItemStack.setCount(inputStackSize + stackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                         if (!player.isCreative()) {
                             stack.shrink(stackSize);
                         }
@@ -253,7 +251,7 @@ public class FactorioFastEntitytransferEvent {
             // if input slot empty, fill with item in hand
             if (inputSlot.isEmpty()) {
                 newItemStack.setCount(stackSize);
-                abstractBlockEntity.setItem(0, newItemStack);
+                abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                 if (!player.isCreative()) {
                     stack.shrink(stackSize);
                 }
@@ -269,7 +267,7 @@ public class FactorioFastEntitytransferEvent {
                     // keep the rest in player inventory
                     if (inputStackSize + stackSize > inputMaxStackSize) {
                         newItemStack.setCount(inputMaxStackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                         if (!player.isCreative()) {
                             stack.setCount(inputStackSize + stackSize - inputMaxStackSize);
                         }
@@ -278,7 +276,7 @@ public class FactorioFastEntitytransferEvent {
                     // if item in input slot and inventory are the same, merge the stacks
                     else {
                         newItemStack.setCount(inputStackSize + stackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setInventorySlotContents(0, newItemStack);
                         if (!player.isCreative()) {
                             stack.shrink(stackSize);
                         }
