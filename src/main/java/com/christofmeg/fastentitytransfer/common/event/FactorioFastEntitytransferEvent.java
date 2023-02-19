@@ -113,6 +113,7 @@ public class FactorioFastEntitytransferEvent {
             player.getInventory().add(outputSlot);
         }
 
+        // award experience
         abstractBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) player);
 
         // if item in hand is fuel without a smelting result
