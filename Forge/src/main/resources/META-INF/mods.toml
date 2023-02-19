@@ -4,7 +4,7 @@ issueTrackerURL="https://github.com/Christofmeg/FastEntityTransfer/issues" #opti
 license="MIT License https://github.com/Christofmeg/FastEntityTransfer/blob/1.19.X/LICENSE"
 [[mods]]
 modId="fastentitytransfer"
-version="1.19.x-1.0.0"
+version="${file.jarVersion}"
 displayName="Fast Entity Transfer"
 displayURL="https://github.com/Christofmeg/FastEntityTransfer" #optional
 logoFile="pack.png"
