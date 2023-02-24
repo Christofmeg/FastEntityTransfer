@@ -9,7 +9,7 @@ displayName="Fast Entity Transfer"
 displayURL="https://github.com/Christofmeg/FastEntityTransfer" #optional
 logoFile="icon.png"
 authors="Christofmeg"
-#credits=""
+credits="Abbie"
 description='''
 Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items that are suitable for Blasting/Smelting/Smoking.
 '''
