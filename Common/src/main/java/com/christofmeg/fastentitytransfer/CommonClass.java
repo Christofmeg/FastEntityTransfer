@@ -1,82 +1,59 @@
-package com.christofmeg.fastentitytransfer.common.event;
-
-import java.util.Optional;
+package com.christofmeg.fastentitytransfer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.BlastingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.item.crafting.SmokingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SmokerBlockEntity;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = "fastentitytransfer", bus = EventBusSubscriber.Bus.FORGE)
-public class FactorioFastEntitytransferEvent {
+import java.util.Map;
+import java.util.Optional;
 
-    @SuppressWarnings({ "resource", })
-    @SubscribeEvent
-    public static void FastEntitytransfer(final PlayerInteractEvent.LeftClickBlock event) {
-        Player player = (Player) event.getEntity();
-        BlockPos pos = event.getPos();
-        Level level = player.getLevel();
-        InteractionHand hand = event.getHand();
+public class CommonClass {
+
+    // This method serves as an initialization hook for the mod. The vanilla
+    // game has no mechanism to load tooltip listeners so this must be
+    // invoked from a mod loader specific project like Forge or Fabric.
+    public static void init() {
+
+//        Constants.LOG.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.isDevelopmentEnvironment() ? "development" : "production");
+//        Constants.LOG.info("Diamond Item >> {}", Registry.ITEM.getKey(Items.DIAMOND));
+    }
+
+    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction direction) {
         ItemStack stack = player.getItemInHand(hand);
         boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (!level.isClientSide() && isSprintKeyDown) {
 
-            if (blockEntity instanceof AbstractFurnaceBlockEntity) {
-                AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-                RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
-                doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(abstractBlockEntity.getItem(0)), level),
-                        event);
-            }
-            if (blockEntity instanceof SmokerBlockEntity) {
-                SmokerBlockEntity smokerBlockEntity = ((SmokerBlockEntity) blockEntity);
+            if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
-                doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(smokerBlockEntity.getItem(0)), level),
-                        event);
-            }
-            if (blockEntity instanceof BlastFurnaceBlockEntity) {
-                BlastFurnaceBlockEntity smokerBlockEntity = ((BlastFurnaceBlockEntity) blockEntity);
+                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
+            } else if (blockEntity instanceof BlastFurnaceBlockEntity smokerBlockEntity) {
                 RecipeType<BlastingRecipe> recipeType = RecipeType.BLASTING;
-                doInteractions(blockEntity, recipeType,
-                        level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level),
-                        level.getRecipeManager().getRecipeFor(recipeType,
-                                new SimpleContainer(smokerBlockEntity.getItem(0)), level),
-                        event);
+                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
+            } else if (blockEntity instanceof AbstractFurnaceBlockEntity abstractBlockEntity) {
+                RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
+                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(abstractBlockEntity.getItem(0)), level), player, hand);
             }
         }
+        return InteractionResult.PASS;
     }
 
-    private static void doInteractions(BlockEntity blockEntity, RecipeType<?> recipeType, Optional<?> optional,
-            Optional<?> inputSlotOptional, final LeftClickBlock event) {
+    private static InteractionResult doInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-        Player player = (Player) event.getEntity();
-        InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
         ItemStack inputSlot = abstractBlockEntity.getItem(0);
@@ -88,8 +65,9 @@ public class FactorioFastEntitytransferEvent {
         boolean inputSlotHasItemStack = !inputSlot.isEmpty();
         boolean outputSlotHasItemStack = !outputSlot.isEmpty();
         boolean fuelSlotHasItemStack = !fuelSlot.isEmpty();
-        int burnTime = ForgeHooks.getBurnTime(stack, recipeType);
-        int fuelBurnTime = ForgeHooks.getBurnTime(fuelSlot, recipeType);
+        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
+        int burnTime = fuelMap.getOrDefault(stack.getItem(), 0);
+        int fuelBurnTime = fuelMap.getOrDefault(fuelSlot.getItem(), 0);
         int inputMaxStackSize = inputSlot.getMaxStackSize();
         int inputStackSize = inputSlot.getCount();
         int fuelMaxStackSize = fuelSlot.getMaxStackSize();
@@ -97,7 +75,7 @@ public class FactorioFastEntitytransferEvent {
         int stackSize = stack.getCount();
 
         // if input slot has items blasting/smelting/smoking recipe, give them to player
-        if (inputSlotHasItemStack && !inputSlotOptional.isPresent()) {
+        if (inputSlotHasItemStack && inputSlotOptional.isEmpty()) {
             player.getInventory().add(inputSlot);
             inputSlot.setCount(0);
         }
@@ -153,7 +131,6 @@ public class FactorioFastEntitytransferEvent {
                             stack.shrink(stackSize);
                         }
                     }
-                    event.setCanceled(true);
                 }
 
                 // Insert smeltable fuel in input slot if fuel slot is already full of it
@@ -193,12 +170,9 @@ public class FactorioFastEntitytransferEvent {
                                     stack.shrink(stackSize);
                                 }
                             }
-                            event.setCanceled(true);
                         }
-                        event.setCanceled(true);
                     }
                 }
-                event.setCanceled(true);
             }
 
             // if fuel slot has fuel, input slot is empty and item is smeltable put item
@@ -214,38 +188,10 @@ public class FactorioFastEntitytransferEvent {
                         }
                     }
                 }
-                event.setCanceled(true);
             }
 
             // if input slot and item in hand matches
-            else if (inputSlotItem == item) {
-
-                // if input stack is full cancel
-                if (inputStackSize != inputMaxStackSize) {
-
-                    // if item count of both stacks exceed max stack size, merge the stacks, and
-                    // keep the rest in player inventory
-                    if (inputStackSize + stackSize > inputMaxStackSize) {
-                        newItemStack.setCount(inputMaxStackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
-                        if (!player.isCreative()) {
-                            stack.setCount(inputStackSize + stackSize - inputMaxStackSize);
-                        }
-                    }
-
-                    // if item in input slot and inventory are the same, merge the stacks
-                    else {
-                        newItemStack.setCount(inputStackSize + stackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
-                        if (!player.isCreative()) {
-                            stack.shrink(stackSize);
-                        }
-                    }
-                    event.setCanceled(true);
-                }
-                event.setCanceled(true);
-            }
-            event.setCanceled(true);
+            else doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
         }
 
         // if item in hand has blasting/smelting/smoking result and has no burntime
@@ -261,36 +207,37 @@ public class FactorioFastEntitytransferEvent {
             }
 
             // if input slot and item in hand matches
-            else if (inputSlotItem == item) {
-
-                // if input stack is full cancel
-                if (inputStackSize != inputMaxStackSize) {
-
-                    // if item count of both stacks exceed max stack size, merge the stacks, and
-                    // keep the rest in player inventory
-                    if (inputStackSize + stackSize > inputMaxStackSize) {
-                        newItemStack.setCount(inputMaxStackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
-                        if (!player.isCreative()) {
-                            stack.setCount(inputStackSize + stackSize - inputMaxStackSize);
-                        }
-                    }
-
-                    // if item in input slot and inventory are the same, merge the stacks
-                    else {
-                        newItemStack.setCount(inputStackSize + stackSize);
-                        abstractBlockEntity.setItem(0, newItemStack);
-                        if (!player.isCreative()) {
-                            stack.shrink(stackSize);
-                        }
-                    }
-                    event.setCanceled(true);
-                }
-                event.setCanceled(true);
-            }
-            event.setCanceled(true);
+            else doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
         }
-        event.setCanceled(true);
+
+        return InteractionResult.CONSUME;
     }
 
+    private static void doIfMatches(Player player, AbstractFurnaceBlockEntity abstractBlockEntity, ItemStack stack, Item item, ItemStack newItemStack, Item inputSlotItem, int inputMaxStackSize, int inputStackSize, int stackSize) {
+        if (inputSlotItem == item) {
+
+            // if input stack is full cancel
+            if (inputStackSize != inputMaxStackSize) {
+
+                // if item count of both stacks exceed max stack size, merge the stacks, and
+                // keep the rest in player inventory
+                if (inputStackSize + stackSize > inputMaxStackSize) {
+                    newItemStack.setCount(inputMaxStackSize);
+                    abstractBlockEntity.setItem(0, newItemStack);
+                    if (!player.isCreative()) {
+                        stack.setCount(inputStackSize + stackSize - inputMaxStackSize);
+                    }
+                }
+
+                // if item in input slot and inventory are the same, merge the stacks
+                else {
+                    newItemStack.setCount(inputStackSize + stackSize);
+                    abstractBlockEntity.setItem(0, newItemStack);
+                    if (!player.isCreative()) {
+                        stack.shrink(stackSize);
+                    }
+                }
+            }
+        }
+    }
 }
