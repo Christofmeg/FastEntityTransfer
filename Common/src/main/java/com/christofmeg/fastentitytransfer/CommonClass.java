@@ -27,11 +27,9 @@ public class CommonClass {
     // invoked from a mod loader specific project like Forge or Fabric.
     public static void init() {
 
-//        Constants.LOG.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.isDevelopmentEnvironment() ? "development" : "production");
-//        Constants.LOG.info("Diamond Item >> {}", Registry.ITEM.getKey(Items.DIAMOND));
     }
 
-    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction direction) {
+    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
         ItemStack stack = player.getItemInHand(hand);
         boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -79,8 +77,7 @@ public class CommonClass {
             player.getInventory().add(inputSlot);
             inputSlot.setCount(0);
         }
-
-        // if fuel slot has items without burntime, give them to player
+        // if fuel slot has items without burn time, give them to player
         if (fuelBurnTime == 0) {
             player.getInventory().add(fuelSlot);
             fuelSlot.setCount(0);
@@ -194,7 +191,7 @@ public class CommonClass {
             else doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
         }
 
-        // if item in hand has blasting/smelting/smoking result and has no burntime
+        // if item in hand has blasting/smelting/smoking result and has no burn time
         else if (optional.isPresent()) {
 
             // if input slot empty, fill with item in hand
