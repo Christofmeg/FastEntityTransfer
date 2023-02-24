@@ -72,7 +72,7 @@ public class CommonClass {
         int fuelStackSize = fuelSlot.getCount();
         int stackSize = stack.getCount();
 
-        // if input slot has items blasting/smelting/smoking recipe, give them to player
+        // if input slot has items no suitable for blasting/smelting/smoking, give them to player
         if (inputSlotHasItemStack && inputSlotOptional.isEmpty()) {
             player.getInventory().add(inputSlot);
             inputSlot.setCount(0);
@@ -83,7 +83,7 @@ public class CommonClass {
             fuelSlot.setCount(0);
         }
 
-        // if output slot has items results, give them to player
+        // if output slot has items, give them to player
         if (outputSlotHasItemStack) {
             player.getInventory().add(outputSlot);
         }

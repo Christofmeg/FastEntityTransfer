@@ -7,9 +7,9 @@ modId="fastentitytransfer"
 version="${file.jarVersion}"
 displayName="Fast Entity Transfer"
 displayURL="https://github.com/Christofmeg/FastEntityTransfer" #optional
-logoFile="pack.png"
-#credits=""
+logoFile="icon.png"
 authors="Christofmeg"
+#credits=""
 description='''
 Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items that are suitable for Blasting/Smelting/Smoking.
 '''

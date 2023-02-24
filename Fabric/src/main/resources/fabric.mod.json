@@ -16,7 +16,7 @@
     "issues": "https://github.com/Christofmeg/FastEntityTransfer/issues"
   },
   "license": "MIT",
-  "icon": "assets/fastentitytransfer/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
