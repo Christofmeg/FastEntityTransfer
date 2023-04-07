@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
@@ -96,7 +97,7 @@ public class CommonClass {
 
             // if fuel slot is empty, fill it with item in hand
             if (fuelSlot.isEmpty()) {
-                newItemStack.setCount(stackSize);
+                newItemStack = stack.copy();
                 abstractBlockEntity.setItem(1, newItemStack);
                 if (!player.isCreative()) {
                     stack.shrink(stackSize);
