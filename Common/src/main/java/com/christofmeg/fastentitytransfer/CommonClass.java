@@ -26,9 +26,7 @@ public class CommonClass {
     // This method serves as an initialization hook for the mod. The vanilla
     // game has no mechanism to load tooltip listeners so this must be
     // invoked from a mod loader specific project like Forge or Fabric.
-    public static void init() {
-
-    }
+    public static void init() {}
 
     public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
         ItemStack stack = player.getItemInHand(hand);
@@ -48,6 +46,18 @@ public class CommonClass {
                 return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(abstractBlockEntity.getItem(0)), level), player, hand);
             }
         }
+        return InteractionResult.PASS;
+    }
+
+    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
+        ItemStack stack = player.getItemInHand(hand);
+        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (!level.isClientSide() && isSprintKeyDown) {
+            //TODO insert half stack when CTRL RIGHT clicking
+        }
+
         return InteractionResult.PASS;
     }
 
