@@ -1,67 +1,23 @@
 package com.christofmeg.fastentitytransfer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SmokerBlockEntity;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class CommonClass {
+public class CommonUtils {
+    public static boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
 
-    // This method serves as an initialization hook for the mod. The vanilla
-    // game has no mechanism to load tooltip listeners so this must be
-    // invoked from a mod loader specific project like Forge or Fabric.
-    public static void init() {}
-
-    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
-        ItemStack stack = player.getItemInHand(hand);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (!level.isClientSide() && isSprintKeyDown) {
-
-            if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
-                RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
-                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof BlastFurnaceBlockEntity smokerBlockEntity) {
-                RecipeType<BlastingRecipe> recipeType = RecipeType.BLASTING;
-                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof AbstractFurnaceBlockEntity abstractBlockEntity) {
-                RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
-                return doInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(abstractBlockEntity.getItem(0)), level), player, hand);
-            }
-        }
-        return InteractionResult.PASS;
-    }
-
-    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
-        ItemStack stack = player.getItemInHand(hand);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (!level.isClientSide() && isSprintKeyDown) {
-            //TODO insert half stack when CTRL RIGHT clicking
-        }
-
-        return InteractionResult.PASS;
-    }
-
-    private static InteractionResult doInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
+    public static InteractionResult doFullStackInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
@@ -199,7 +155,7 @@ public class CommonClass {
             }
 
             // if input slot and item in hand matches
-            else doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
+            else CommonUtils.doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
         }
 
         // if item in hand has blasting/smelting/smoking result and has no burn time
@@ -215,13 +171,49 @@ public class CommonClass {
             }
 
             // if input slot and item in hand matches
-            else doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
+            else CommonUtils.doIfMatches(player, abstractBlockEntity, stack, item, newItemStack, inputSlotItem, inputMaxStackSize, inputStackSize, stackSize);
         }
 
         return InteractionResult.CONSUME;
     }
 
-    private static void doIfMatches(Player player, AbstractFurnaceBlockEntity abstractBlockEntity, ItemStack stack, Item item, ItemStack newItemStack, Item inputSlotItem, int inputMaxStackSize, int inputStackSize, int stackSize) {
+    public static InteractionResult doRightClickInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
+        //TODO insert half stack when CTRL RIGHT clicking
+
+        AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
+        ItemStack stack = player.getItemInHand(hand);
+        Item item = stack.getItem();
+        ItemStack inputSlot = abstractBlockEntity.getItem(0);
+        ItemStack fuelSlot = abstractBlockEntity.getItem(1);
+        ItemStack outputSlot = abstractBlockEntity.getItem(2);
+        ItemStack newItemStack = new ItemStack(item);
+        Item inputSlotItem = inputSlot.getItem();
+        Item fuelSlotItem = fuelSlot.getItem();
+        boolean inputSlotHasItemStack = !inputSlot.isEmpty();
+        boolean outputSlotHasItemStack = !outputSlot.isEmpty();
+        boolean fuelSlotHasItemStack = !fuelSlot.isEmpty();
+        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
+        int burnTime = fuelMap.getOrDefault(stack.getItem(), 0);
+        int fuelBurnTime = fuelMap.getOrDefault(fuelSlot.getItem(), 0);
+        int inputMaxStackSize = inputSlot.getMaxStackSize();
+        int inputStackSize = inputSlot.getCount();
+        int fuelMaxStackSize = fuelSlot.getMaxStackSize();
+        int fuelStackSize = fuelSlot.getCount();
+        int stackSize = stack.getCount();
+
+
+
+
+
+
+
+
+
+
+        return InteractionResult.CONSUME;
+    }
+
+    public static void doIfMatches(Player player, AbstractFurnaceBlockEntity abstractBlockEntity, ItemStack stack, Item item, ItemStack newItemStack, Item inputSlotItem, int inputMaxStackSize, int inputStackSize, int stackSize) {
         if (inputSlotItem == item) {
 
             // if input stack is full cancel
@@ -248,4 +240,5 @@ public class CommonClass {
             }
         }
     }
+
 }

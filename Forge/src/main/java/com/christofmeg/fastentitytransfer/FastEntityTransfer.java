@@ -5,7 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(Constants.MOD_ID)
+@Mod(CommonConstants.MOD_ID)
 public class FastEntityTransfer {
 
     public FastEntityTransfer() {
@@ -15,7 +15,8 @@ public class FastEntityTransfer {
         // project.
 
         // Use Forge to bootstrap the Common mod.
-        CommonClass.init();
+        CommonLeftClickInteractions.init();
+        CommonRightClickInteractions.init();
 
         // Some code like events require special initialization from the
         // loader specific code.
@@ -27,11 +28,11 @@ public class FastEntityTransfer {
     // It takes Forge's event object and passes the parameters along to
     // the Common listener.
     private void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        InteractionResult result = CommonClass.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
+        InteractionResult result = CommonLeftClickInteractions.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
     }
     private void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        InteractionResult result = CommonClass.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
+        InteractionResult result = CommonRightClickInteractions.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
     }
 }

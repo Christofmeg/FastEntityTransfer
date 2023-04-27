@@ -1,6 +1,6 @@
 package com.christofmeg.fastentitytransfer.platform;
 
-import com.christofmeg.fastentitytransfer.Constants;
+import com.christofmeg.fastentitytransfer.CommonConstants;
 import com.christofmeg.fastentitytransfer.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
@@ -14,7 +14,7 @@ public class Services {
         final T loadedService = ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        Constants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
+        CommonConstants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 }

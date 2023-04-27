@@ -14,10 +14,12 @@ public class FastEntityTransfer implements ModInitializer {
 
         // Use Fabric to bootstrap the Common mod.
 //        Constants.LOG.info("Hello Fabric world!");
-        CommonClass.init();
+        CommonLeftClickInteractions.init();
+        CommonRightClickInteractions.init();
         
         // Some code like events require special initialization from the
         // loader specific code.
-        AttackBlockCallback.EVENT.register(CommonClass::onLeftClickBlock);
+        AttackBlockCallback.EVENT.register(CommonLeftClickInteractions::onLeftClickBlock);
+        AttackBlockCallback.EVENT.register(CommonRightClickInteractions::onRightClickBlock);
     }
 }
