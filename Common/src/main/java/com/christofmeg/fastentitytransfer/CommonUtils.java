@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class CommonUtils {
     public static boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
 
-    public static InteractionResult doFullStackInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
+    public static InteractionResult doLeftClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> optional, @NotNull Optional<?> inputSlotOptional, @NotNull Player player, @NotNull InteractionHand hand) {
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
@@ -177,33 +178,8 @@ public class CommonUtils {
         return InteractionResult.CONSUME;
     }
 
-    public static InteractionResult doRightClickInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
+    public static InteractionResult doRightClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> optional, @NotNull Optional<?> inputSlotOptional, @NotNull Player player, @NotNull InteractionHand hand) {
         //TODO insert half stack when CTRL RIGHT clicking
-
-        AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
-        ItemStack stack = player.getItemInHand(hand);
-        Item item = stack.getItem();
-        ItemStack inputSlot = abstractBlockEntity.getItem(0);
-        ItemStack fuelSlot = abstractBlockEntity.getItem(1);
-        ItemStack outputSlot = abstractBlockEntity.getItem(2);
-        ItemStack newItemStack = new ItemStack(item);
-        Item inputSlotItem = inputSlot.getItem();
-        Item fuelSlotItem = fuelSlot.getItem();
-        boolean inputSlotHasItemStack = !inputSlot.isEmpty();
-        boolean outputSlotHasItemStack = !outputSlot.isEmpty();
-        boolean fuelSlotHasItemStack = !fuelSlot.isEmpty();
-        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
-        int burnTime = fuelMap.getOrDefault(stack.getItem(), 0);
-        int fuelBurnTime = fuelMap.getOrDefault(fuelSlot.getItem(), 0);
-        int inputMaxStackSize = inputSlot.getMaxStackSize();
-        int inputStackSize = inputSlot.getCount();
-        int fuelMaxStackSize = fuelSlot.getMaxStackSize();
-        int fuelStackSize = fuelSlot.getCount();
-        int stackSize = stack.getCount();
-
-
-
-
 
 
 

@@ -46,32 +46,12 @@ minecraft {
             }
         }
 
-        data {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
-        }
     }
 }
-
-sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
-    // CATALOGUE
-    if (project.hasProperty('catalogue_forge_version')) {
-        implementation fg.deobf("curse.maven:catalogue-459701:${catalogue_forge_version}")
-    }
 }
 
 tasks.withType(JavaCompile) {

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SmokerBlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class CommonRightClickInteractions {
 
@@ -24,22 +25,6 @@ public class CommonRightClickInteractions {
     // invoked from a mod loader specific project like Forge or Fabric.
     public static void init() {}
 
-    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
-        ItemStack stack = player.getItemInHand(hand);
-        BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        if (!level.isClientSide() && CommonUtils.isSprintKeyDown) {
-            if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
-                RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof BlastFurnaceBlockEntity smokerBlockEntity) {
-                RecipeType<BlastingRecipe> recipeType = RecipeType.BLASTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof AbstractFurnaceBlockEntity abstractBlockEntity) {
-                RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(abstractBlockEntity.getItem(0)), level), player, hand);
-            }
-        }
-        return InteractionResult.PASS;
-    }
+
 }
