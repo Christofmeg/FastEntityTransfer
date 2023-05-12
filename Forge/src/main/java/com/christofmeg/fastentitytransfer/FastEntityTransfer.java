@@ -1,13 +1,11 @@
 package com.christofmeg.fastentitytransfer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
 @Mod(CommonConstants.MOD_ID)
 @Mod.EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -29,13 +27,13 @@ public class FastEntityTransfer {
     // the Common listener.
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
+        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getPlayer(), event.getPlayer().getLevel(), event.getHand(), event.getPos(), event.getFace());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec());
+        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getPlayer().getLevel(), event.getHand(), event.getHitVec());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
 
     }
