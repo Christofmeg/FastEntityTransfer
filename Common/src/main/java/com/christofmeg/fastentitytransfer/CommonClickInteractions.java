@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -28,8 +29,8 @@ public class CommonClickInteractions {
     public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
         ItemStack stack = player.getItemInHand(hand);
         BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (!level.isClientSide() && CommonUtils.isSprintKeyDown) {
+        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
+        if (!level.isClientSide() && isSprintKeyDown) {
             if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
                 return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
@@ -48,17 +49,17 @@ public class CommonClickInteractions {
         ItemStack stack = player.getItemInHand(hand);
         BlockPos pos = blockHitResult.getBlockPos();
         BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (!level.isClientSide() && CommonUtils.isSprintKeyDown) {
-            if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
+        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
+        if (!level.isClientSide() && isSprintKeyDown) {
+            if (blockEntity instanceof SmokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof BlastFurnaceBlockEntity smokerBlockEntity) {
+                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), player, hand);
+            } else if (blockEntity instanceof BlastFurnaceBlockEntity) {
                 RecipeType<BlastingRecipe> recipeType = RecipeType.BLASTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof AbstractFurnaceBlockEntity abstractBlockEntity) {
+                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), player, hand);
+            } else if (blockEntity instanceof AbstractFurnaceBlockEntity) {
                 RecipeType<SmeltingRecipe> recipeType = RecipeType.SMELTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(abstractBlockEntity.getItem(0)), level), player, hand);
+                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), player, hand);
             }
         }
         return InteractionResult.PASS;

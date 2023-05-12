@@ -1,6 +1,8 @@
 package com.christofmeg.fastentitytransfer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,16 +28,15 @@ public class FastEntityTransfer {
     // It takes Forge's event object and passes the parameters along to
     // the Common listener.
     @SubscribeEvent
-    public static void onLeftClickBlock(@NotNull LeftClickBlock event) {
+    public static void onLeftClickBlock(LeftClickBlock event) {
         InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
     }
 
-//    @SubscribeEvent
-    public static void onRightClickBlock(@NotNull RightClickBlock event) {
+    @SubscribeEvent
+    public static void onRightClickBlock(RightClickBlock event) {
         InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec());
-        if (result == InteractionResult.CONSUME) {
-//            event.setCanceled(true);
-        }
+        if (result == InteractionResult.CONSUME) event.setCanceled(true);
+
     }
 }

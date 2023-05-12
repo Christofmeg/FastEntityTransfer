@@ -7,9 +7,6 @@ subprojects {
     java.withJavadocJar()
         
     jar {
-        from(rootProject.file("LICENSE")) {
-            rename { "${it}_${mod_name}" }
-        }
         manifest {
             attributes([
                 'Specification-Title'     : mod_name,
@@ -23,12 +20,6 @@ subprojects {
                 'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                 'Built-On-Minecraft'      : minecraft_version
             ])
-        }
-    }
-
-    sourcesJar {
-        from(rootProject.file("LICENSE")) {
-            rename { "${it}_${mod_name}" }
         }
     }
 

@@ -3,7 +3,7 @@
   "id": "fastentitytransfer",
   "version": "${version}",
   "name": "Fast Entity Transfer",
-  "description": "Factorio styled Fast Entity Transfer. Activated by CTRL + LEFT CLICK with items that are suitable for Blasting/Smelting/Smoking.",
+  "description": "Factorio styled Fast Entity Transfer. CTRL + LEFT/RIGHT CLICK with items that are suitable for Blasting/Smelting/Smoking.",
   "authors": [
     "Christofmeg"
   ],
@@ -15,7 +15,7 @@
     "sources": "https://github.com/Christofmeg/FastEntityTransfer",
     "issues": "https://github.com/Christofmeg/FastEntityTransfer/issues"
   },
-  "license": "MIT",
+  "license": "The MIT License (MIT)",
   "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
