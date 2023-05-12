@@ -27,13 +27,13 @@ public class FastEntityTransfer {
     // the Common listener.
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getPlayer(), event.getPlayer().getLevel(), event.getHand(), event.getPos(), event.getFace());
+        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getPos(), event.getFace());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getPlayer().getLevel(), event.getHand(), event.getHitVec());
+        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getHitVec());
         if (result == InteractionResult.CONSUME) event.setCanceled(true);
 
     }

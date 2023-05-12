@@ -9,14 +9,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Map;
 import java.util.Optional;
 
 public class CommonUtils {
 
-    public static InteractionResult doLeftClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> optional, @NotNull Optional<?> inputSlotOptional, @NotNull Player player, @NotNull InteractionHand hand) {
+    public static InteractionResult doLeftClickInteractions(BlockEntity blockEntity, Optional<?> optional, Optional<?> inputSlotOptional, Player player, InteractionHand hand) {
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
@@ -79,7 +79,7 @@ public class CommonUtils {
         return InteractionResult.CONSUME;
     }
 
-    public static InteractionResult doRightClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> optional, @NotNull Player player, @NotNull InteractionHand hand) {
+    public static InteractionResult doRightClickInteractions(BlockEntity blockEntity, Optional<?> optional, Player player, InteractionHand hand) {
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
