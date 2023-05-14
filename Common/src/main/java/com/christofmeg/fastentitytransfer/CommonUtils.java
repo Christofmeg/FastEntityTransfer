@@ -107,7 +107,7 @@ public class CommonUtils {
             // if fuel slot is empty, fill it with item in hand
             if (fuelSlot.isEmpty()) {
                 newItemStack = stack.copy();
-                newItemStack.shrink(half);
+                newItemStack.setCount(half);
                 abstractBlockEntity.setItem(1, newItemStack);
                 if (!player.isCreative()) {
                     stack.shrink(half);
