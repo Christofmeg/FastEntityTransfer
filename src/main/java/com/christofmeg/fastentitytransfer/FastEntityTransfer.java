@@ -1,7 +1,6 @@
 package com.christofmeg.fastentitytransfer;
 
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,14 +26,15 @@ public class FastEntityTransfer {
     // the Common listener.
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getPos(), event.getFace());
-        if (result == InteractionResult.CONSUME) event.setCanceled(true);
+        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onLeftClickBlock((PlayerEntity) event.getEntity(), event.getWorld(), event.getHand(), event.getPos(), event.getFace());
+        if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getHitVec());
-        if (result == InteractionResult.CONSUME) event.setCanceled(true);
+        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getHitVec());
+        if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
 
     }
+
 }
