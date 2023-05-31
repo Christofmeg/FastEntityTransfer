@@ -1,6 +1,5 @@
 package com.christofmeg.fastentitytransfer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
