@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -26,13 +27,13 @@ public class FastEntityTransfer {
     // the Common listener.
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onLeftClickBlock((PlayerEntity) event.getEntity(), event.getWorld(), event.getHand(), event.getPos(), event.getFace());
+        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onLeftClickBlock((EntityPlayer) event.getEntity(), event.getWorld(), event.getHand(), event.getPos());
         if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getPos());
+        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntityPlayer(), event.getWorld(), event.getHand(), event.getPos());
         if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
 
     }

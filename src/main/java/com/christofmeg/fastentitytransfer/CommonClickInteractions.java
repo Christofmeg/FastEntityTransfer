@@ -1,62 +1,46 @@
 package com.christofmeg.fastentitytransfer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.BlastingRecipe;
 import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.SmokingRecipe;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.BlastFurnaceTileEntity;
-import net.minecraft.tileentity.SmokerTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.crafting.RecipeType;
+import net.minecraftforge.common.crafting.VanillaRecipeTypes;
 
 public class CommonClickInteractions {
 
     // This method serves as an initialization hook for the mod. The vanilla
     // game has no mechanism to load tooltip listeners so this must be
     // invoked from a mod loader specific project like Forge or Fabric.
+
     public static void init() {}
 
-    public static CommonUtils.PrivateInteractionResult onLeftClickBlock(PlayerEntity player, World level, Hand hand, BlockPos pos, Direction ignoredDirection) {
-        ItemStack stack = player.getItemInHand(hand);
-        TileEntity blockEntity = level.getBlockEntity(pos);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        if (!level.isClientSide() && isSprintKeyDown) {
-            if (blockEntity instanceof SmokerTileEntity) {
-                IRecipeType<SmokingRecipe> recipeType = IRecipeType.SMOKING;
-                return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new Inventory(((AbstractFurnaceTileEntity) blockEntity).getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof BlastFurnaceTileEntity) {
-                IRecipeType<BlastingRecipe> recipeType = IRecipeType.BLASTING;
-                return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new Inventory(((AbstractFurnaceTileEntity) blockEntity).getItem(0)), level), player, hand);
-            } else if (blockEntity instanceof AbstractFurnaceTileEntity) {
-                IRecipeType<FurnaceRecipe> recipeType = IRecipeType.SMELTING;
-                return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new Inventory(((AbstractFurnaceTileEntity) blockEntity).getItem(0)), level), player, hand);
+    public static CommonUtils.PrivateInteractionResult onLeftClickBlock(EntityPlayer player, World level, EnumHand hand, BlockPos pos) {
+        ItemStack stack = player.getHeldItem(hand);
+        TileEntity blockEntity = level.getTileEntity(pos);
+        boolean isSprintKeyDown = Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown();
+        if (!level.isRemote() && isSprintKeyDown) {
+            if (blockEntity instanceof TileEntityFurnace) {
+                RecipeType<FurnaceRecipe> recipeType = VanillaRecipeTypes.SMELTING;
+                return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipe(recipeType, new Inventory(stack), level), level.getRecipeManager().getRecipe(recipeType, new Inventory(((TileEntityFurnace) blockEntity).getStackInSlot(0)), level), player, hand);
             }
         }
         return CommonUtils.PrivateInteractionResult.PASS;
     }
 
-    public static CommonUtils.PrivateInteractionResult onRightClickBlock(PlayerEntity player, World level, Hand hand, BlockPos pos) {
-        ItemStack stack = player.getItemInHand(hand);
-        TileEntity blockEntity = level.getBlockEntity(pos);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        if (!level.isClientSide() && isSprintKeyDown) {
-            if (blockEntity instanceof SmokerTileEntity) {
-                IRecipeType<SmokingRecipe> recipeType = IRecipeType.SMOKING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), player, hand);
-            } else if (blockEntity instanceof BlastFurnaceTileEntity) {
-                IRecipeType<BlastingRecipe> recipeType = IRecipeType.BLASTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), player, hand);
-            } else if (blockEntity instanceof AbstractFurnaceTileEntity) {
-                IRecipeType<FurnaceRecipe> recipeType = IRecipeType.SMELTING;
-                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new Inventory(stack), level), player, hand);
+    public static CommonUtils.PrivateInteractionResult onRightClickBlock(EntityPlayer player, World level, EnumHand hand, BlockPos pos) {
+        ItemStack stack = player.getHeldItem(hand);
+        TileEntity blockEntity = level.getTileEntity(pos);
+        boolean isSprintKeyDown = Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown();
+        if (!level.isRemote() && isSprintKeyDown) {
+            if (blockEntity instanceof TileEntityFurnace) {
+                RecipeType<FurnaceRecipe> recipeType = VanillaRecipeTypes.SMELTING;
+                return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipe(recipeType, new Inventory(stack), level), player, hand);
             }
         }
         return CommonUtils.PrivateInteractionResult.PASS;
