@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "fastentitytransfer",
+  "version": "${version}",
+  "name": "Fast Entity Transfer",
+  "description": "Factorio styled Fast Entity Transfer. CTRL + LEFT/RIGHT CLICK with items that are suitable for Blasting/Smelting/Smoking.",
+  "authors": [
+    "Christofmeg"
+  ],
+  "contributors": [
+    "Abbie"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Christofmeg/FastEntityTransfer",
+    "sources": "https://github.com/Christofmeg/FastEntityTransfer",
+    "issues": "https://github.com/Christofmeg/FastEntityTransfer/issues"
+  },
+  "license": "The MIT License (MIT)",
+  "icon": "icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "com.christofmeg.fastentitytransfer.FastEntityTransfer"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.9.1+build.205",
+    "fabric": "*",
+    "minecraft": "1.16.x",
+    "java": ">=8"
+  }
+}

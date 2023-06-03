@@ -1,30 +1,31 @@
 package com.christofmeg.fastentitytransfer;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Map;
 import java.util.Optional;
 
 public class CommonUtils {
 
-    public static PrivateInteractionResult doLeftClickInteractions(TileEntity blockEntity, Optional<?> recipe, Optional<?> inputSlotProcessingResult, PlayerEntity player, Hand hand) {
-        AbstractFurnaceTileEntity abstractTileEntity = ((AbstractFurnaceTileEntity) blockEntity);
+    public static InteractionResult doLeftClickInteractions(BlockEntity blockEntity, Optional<?> recipe, Optional<?> inputSlotProcessingResult, Player player, InteractionHand hand) {
+        AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
-        ItemStack inputSlotStack = abstractTileEntity.getItem(0);
-        ItemStack fuelSlotStack = abstractTileEntity.getItem(1);
-        ItemStack outputSlot = abstractTileEntity.getItem(2);
+        ItemStack inputSlotStack = abstractBlockEntity.getItem(0);
+        ItemStack fuelSlotStack = abstractBlockEntity.getItem(1);
+        ItemStack outputSlot = abstractBlockEntity.getItem(2);
         boolean inputSlotHasItemStack = !inputSlotStack.isEmpty();
         boolean outputSlotHasItemStack = !outputSlot.isEmpty();
         boolean fuelSlotHasItemStack = !fuelSlotStack.isEmpty();
-        Map<Item, Integer> fuelMap = AbstractFurnaceTileEntity.getFuel();
+        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
         int burnTime = fuelMap.getOrDefault(stackInHand.getItem(), 0);
         int fuelBurnTime = fuelMap.getOrDefault(fuelSlotStack.getItem(), 0);
         int inputMaxStackSize = inputSlotStack.getMaxStackSize();
@@ -50,21 +51,21 @@ public class CommonUtils {
         }
 
         // award experience
-        abstractTileEntity.awardUsedRecipesAndPopExperience((ServerPlayerEntity) player);
+        abstractBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) player);
 
         // function that performs the transfer
-        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractTileEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
+        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
 
-        return PrivateInteractionResult.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
-    public static PrivateInteractionResult doRightClickInteractions(TileEntity blockEntity, Optional<?> recipe, PlayerEntity player, Hand hand) {
-        AbstractFurnaceTileEntity abstractTileEntity = ((AbstractFurnaceTileEntity) blockEntity);
+    public static InteractionResult doRightClickInteractions(BlockEntity blockEntity, Optional<?> recipe, Player player, InteractionHand hand) {
+        AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
-        ItemStack inputSlotStack = abstractTileEntity.getItem(0);
-        ItemStack fuelSlotStack = abstractTileEntity.getItem(1);
+        ItemStack inputSlotStack = abstractBlockEntity.getItem(0);
+        ItemStack fuelSlotStack = abstractBlockEntity.getItem(1);
         boolean fuelSlotHasItemStack = !fuelSlotStack.isEmpty();
-        Map<Item, Integer> fuelMap = AbstractFurnaceTileEntity.getFuel();
+        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
         int burnTime = fuelMap.getOrDefault(stackInHand.getItem(), 0);
         int inputMaxStackSize = inputSlotStack.getMaxStackSize();
         int inputSlotStackSize = inputSlotStack.getCount();
@@ -77,12 +78,12 @@ public class CommonUtils {
         }
 
         // function that performs the transfer
-        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, half, abstractTileEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
+        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, half, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
 
-        return PrivateInteractionResult.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
-    private static void doTransfers(ItemStack stackInHand, int burnTime, ItemStack fuelSlotStack, int stackSize, int half, AbstractFurnaceTileEntity abstractTileEntity, PlayerEntity player, int fuelStackSize, int fuelMaxStackSize, Optional<?> recipe, ItemStack inputSlotStack, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack) {
+    private static void doTransfers(ItemStack stackInHand, int burnTime, ItemStack fuelSlotStack, int stackSize, int half, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, int fuelStackSize, int fuelMaxStackSize, Optional<?> recipe, ItemStack inputSlotStack, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack) {
         //transfer nbt tags to new item stack
         ItemStack newItemStack = stackInHand.copy();
 
@@ -92,24 +93,24 @@ public class CommonUtils {
             // if fuel slot is empty, fill it with item in hand
             if (fuelSlotStack.isEmpty()) {
                 newItemStack.setCount(half);
-                abstractTileEntity.setItem(1, newItemStack);
+                abstractBlockEntity.setItem(1, newItemStack);
                 if (!player.isCreative()) {
                     stackInHand.shrink(half);
                 }
             }
 
             else {
-                doIfHasBurntime(fuelSlotStack, stackInHand, fuelStackSize, fuelMaxStackSize, abstractTileEntity, player, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, inputSlotStack, stackSize, half, newItemStack);
+                doIfHasBurntime(fuelSlotStack, stackInHand, fuelStackSize, fuelMaxStackSize, abstractBlockEntity, player, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, inputSlotStack, stackSize, half, newItemStack);
             }
         }
 
         // if item in hand is item without burntime
         else {
-            doIfRecipeIsPresent(recipe, inputSlotStack, newItemStack, abstractTileEntity, player, stackInHand, inputMaxStackSize, inputSlotStackSize, stackSize, half);
+            doIfRecipeIsPresent(recipe, inputSlotStack, newItemStack, abstractBlockEntity, player, stackInHand, inputMaxStackSize, inputSlotStackSize, stackSize, half);
         }
     }
 
-    private static void doIfHasBurntime(ItemStack fuelSlotStack, ItemStack stackInHand, int fuelStackSize, int fuelMaxStackSize, AbstractFurnaceTileEntity abstractTileEntity, PlayerEntity player, Optional<?> recipe, ItemStack inputSlot, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack, ItemStack inputSlotStack, int stackSize, int half, ItemStack newItemStack) {
+    private static void doIfHasBurntime(ItemStack fuelSlotStack, ItemStack stackInHand, int fuelStackSize, int fuelMaxStackSize, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, Optional<?> recipe, ItemStack inputSlot, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack, ItemStack inputSlotStack, int stackSize, int half, ItemStack newItemStack) {
 
         ItemStack tempItemStack = stackInHand.copy();
         ItemStack tempFuelSlotStack= fuelSlotStack.copy();
@@ -128,7 +129,7 @@ public class CommonUtils {
                 // keep the rest in player inventory
                 if ((fuelStackSize + half) > fuelMaxStackSize) {
                     newItemStack.setCount(fuelMaxStackSize);
-                    abstractTileEntity.setItem(1, newItemStack);
+                    abstractBlockEntity.setItem(1, newItemStack);
                     if (!player.isCreative()) {
                         stackInHand.setCount((fuelStackSize + stackSize) - fuelMaxStackSize);
                     }
@@ -137,7 +138,7 @@ public class CommonUtils {
                 // if item in fuel slot is the same, merge the stacks
                 else {
                     newItemStack.setCount(fuelStackSize + half);
-                    abstractTileEntity.setItem(1, newItemStack);
+                    abstractBlockEntity.setItem(1, newItemStack);
                     if (!player.isCreative()) {
                         stackInHand.shrink(half);
                     }
@@ -152,7 +153,7 @@ public class CommonUtils {
                     // if input slot is empty and fuel slot is full, put smeltable fuel in input slot
                     if (inputSlot.isEmpty()) {
                         newItemStack.setCount(half);
-                        abstractTileEntity.setItem(0, newItemStack);
+                        abstractBlockEntity.setItem(0, newItemStack);
                         if (!player.isCreative()) {
                             stackInHand.shrink(half);
                         }
@@ -168,7 +169,7 @@ public class CommonUtils {
                             // keep the rest in player inventory
                             if ((inputSlotStackSize + half) > inputMaxStackSize) {
                                 newItemStack.setCount(inputMaxStackSize);
-                                abstractTileEntity.setItem(0, newItemStack);
+                                abstractBlockEntity.setItem(0, newItemStack);
                                 if (!player.isCreative()) {
                                     stackInHand.setCount(inputSlotStackSize + stackSize - inputMaxStackSize);
                                 }
@@ -177,7 +178,7 @@ public class CommonUtils {
                             // if item in slot is the same, merge the stacks
                             else {
                                 newItemStack.setCount(inputSlotStackSize + half);
-                                abstractTileEntity.setItem(0, newItemStack);
+                                abstractBlockEntity.setItem(0, newItemStack);
                                 if (!player.isCreative()) {
                                     stackInHand.shrink(half);
                                 }
@@ -195,7 +196,7 @@ public class CommonUtils {
                 ItemStack resultItem = ((AbstractCookingRecipe) recipe.get()).getResultItem();
                 if (!resultItem.isEmpty()) {
                     newItemStack.setCount(half);
-                    abstractTileEntity.setItem(0, newItemStack);
+                    abstractBlockEntity.setItem(0, newItemStack);
                     if (!player.isCreative()) {
                         stackInHand.shrink(half);
                     }
@@ -204,19 +205,19 @@ public class CommonUtils {
 
             // if input slot and item in hand matches
             else {
-                doIfMatches(player, abstractTileEntity, stackInHand, newItemStack, inputSlotStack, inputMaxStackSize, inputSlotStackSize, stackSize, half);
+                doIfMatches(player, abstractBlockEntity, stackInHand, newItemStack, inputSlotStack, inputMaxStackSize, inputSlotStackSize, stackSize, half);
             }
         }
     }
 
-    private static void doIfRecipeIsPresent(Optional<?> recipe, ItemStack inputSlotStack, ItemStack newItemStack, AbstractFurnaceTileEntity abstractTileEntity, PlayerEntity player, ItemStack stackInHand, int inputMaxStackSize, int inputSlotStackSize, int stackSize, int half) {
+    private static void doIfRecipeIsPresent(Optional<?> recipe, ItemStack inputSlotStack, ItemStack newItemStack, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, ItemStack stackInHand, int inputMaxStackSize, int inputSlotStackSize, int stackSize, int half) {
         // if item in hand has blasting/smelting/smoking result and has no burn time
         if (recipe.isPresent()) {
 
             // if input slot empty, fill with item in hand
             if (inputSlotStack.isEmpty()) {
                 newItemStack.setCount(half);
-                abstractTileEntity.setItem(0, newItemStack);
+                abstractBlockEntity.setItem(0, newItemStack);
                 if (!player.isCreative()) {
                     stackInHand.shrink(half);
                 }
@@ -224,12 +225,12 @@ public class CommonUtils {
 
             // if input slot and item in hand matches
             else {
-                doIfMatches(player, abstractTileEntity, stackInHand, newItemStack, inputSlotStack, inputMaxStackSize, inputSlotStackSize, stackSize, half);
+                doIfMatches(player, abstractBlockEntity, stackInHand, newItemStack, inputSlotStack, inputMaxStackSize, inputSlotStackSize, stackSize, half);
             }
         }
     }
 
-    private static void doIfMatches(PlayerEntity player, AbstractFurnaceTileEntity abstractTileEntity, ItemStack stackInHand, ItemStack newItemStack, ItemStack inputSlotStack, int inputMaxStackSize, int inputSlotStackSize, int stackSize, int half) {
+    private static void doIfMatches(Player player, AbstractFurnaceBlockEntity abstractBlockEntity, ItemStack stackInHand, ItemStack newItemStack, ItemStack inputSlotStack, int inputMaxStackSize, int inputSlotStackSize, int stackSize, int half) {
 
         ItemStack tempItemStack = stackInHand.copy();
         ItemStack tempInputSlotStack = inputSlotStack.copy();
@@ -245,7 +246,7 @@ public class CommonUtils {
                 // keep the rest in player inventory
                 if (inputSlotStackSize + half > inputMaxStackSize) {
                     newItemStack.setCount(inputMaxStackSize);
-                    abstractTileEntity.setItem(0, newItemStack);
+                    abstractBlockEntity.setItem(0, newItemStack);
                     if (!player.isCreative()) {
                         stackInHand.setCount(inputSlotStackSize + stackSize - inputMaxStackSize);
                     }
@@ -254,7 +255,7 @@ public class CommonUtils {
                 // if item in input slot and inventory are the same, merge the stacks
                 else {
                     newItemStack.setCount(inputSlotStackSize + half);
-                    abstractTileEntity.setItem(0, newItemStack);
+                    abstractBlockEntity.setItem(0, newItemStack);
                     if (!player.isCreative()) {
                         stackInHand.shrink(half);
                     }
@@ -264,8 +265,8 @@ public class CommonUtils {
     }
 
     private static boolean compareItemStackTags(ItemStack stack1, ItemStack stack2) {
-        CompoundNBT tag1 = stack1.getTag();
-        CompoundNBT tag2 = stack2.getTag();
+        CompoundTag tag1 = stack1.getTag();
+        CompoundTag tag2 = stack2.getTag();
 
         // Check if both tags are null or equal
         if (tag1 == tag2) {
@@ -281,7 +282,7 @@ public class CommonUtils {
         return compareTags(tag1, tag2);
     }
 
-    private static boolean compareTags(CompoundNBT tag1, CompoundNBT tag2) {
+    private static boolean compareTags(CompoundTag tag1, CompoundTag tag2) {
         // Compare all keys in tag1
         for (String key : tag1.getAllKeys()) {
             if (!tag2.contains(key)) {
@@ -305,11 +306,6 @@ public class CommonUtils {
         }
 
         return true;
-    }
-
-    public static enum PrivateInteractionResult {
-        CONSUME,
-        PASS,
     }
 
 }

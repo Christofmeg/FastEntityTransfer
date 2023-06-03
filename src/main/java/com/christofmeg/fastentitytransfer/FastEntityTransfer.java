@@ -1,40 +1,24 @@
 package com.christofmeg.fastentitytransfer;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
-@Mod(CommonConstants.MOD_ID)
-@Mod.EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class FastEntityTransfer {
+public class FastEntityTransfer implements ModInitializer {
 
-    public FastEntityTransfer() {
+    @Override
+    public void onInitialize() {
 
-        // This method is invoked by the Forge mod loader when it is ready
-        // to load your mod. You can access Forge and Common code in this
+        // This method is invoked by the Fabric mod loader when it is ready
+        // to load your mod. You can access Fabric and Common code in this
         // project.
 
-        // Use Forge to bootstrap the Common mod.
+        // Use Fabric to bootstrap the Common mod.
         CommonClickInteractions.init();
 
+        // Some code like events require special initialization from the
+        // loader specific code.
+        AttackBlockCallback.EVENT.register(CommonClickInteractions::onLeftClickBlock);
+        UseBlockCallback.EVENT.register(CommonClickInteractions::onRightClickBlock);
     }
-    
-    // This method exists as a wrapper for the code in the Common project.
-    // It takes Forge's event object and passes the parameters along to
-    // the Common listener.
-    @SubscribeEvent
-    public static void onLeftClickBlock(LeftClickBlock event) {
-        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onLeftClickBlock((PlayerEntity) event.getEntity(), event.getWorld(), event.getHand(), event.getPos(), event.getFace());
-        if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
-    }
-
-    @SubscribeEvent
-    public static void onRightClickBlock(RightClickBlock event) {
-        CommonUtils.PrivateInteractionResult result = CommonClickInteractions.onRightClickBlock(event.getPlayer(), event.getWorld(), event.getHand(), event.getHitVec());
-        if (result == CommonUtils.PrivateInteractionResult.CONSUME) event.setCanceled(true);
-
-    }
-
 }
