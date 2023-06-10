@@ -17,54 +17,91 @@ import java.util.Optional;
 
 public class CommonUtils {
 
-    public static InteractionResult doLeftClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> recipe, @NotNull Optional<?> inputSlotProcessingResult, @NotNull Player player, @NotNull InteractionHand hand) {
+    /**
+     * Performs left-click interactions on a block entity in the game.
+     * This method handles various checks and transfers related to the left-click interaction.
+     *
+     * @param blockEntity            The block entity to interact with.
+     * @param recipe                 An optional recipe associated with the interaction.
+     * @param inputSlotProcessingResult  An optional processing result of the input slot.
+     * @param player                 The player performing the interaction.
+     * @param hand                   The hand used for the interaction.
+     * @return                       The result of the interaction.
+     */
+    public static InteractionResult doLeftClickInteractions(
+            @NotNull BlockEntity blockEntity,
+            @NotNull Optional<?> recipe,
+            @NotNull Optional<?> inputSlotProcessingResult,
+            @NotNull Player player,
+            @NotNull InteractionHand hand) {
+
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
         ItemStack inputSlotStack = abstractBlockEntity.getItem(0);
         ItemStack fuelSlotStack = abstractBlockEntity.getItem(1);
         ItemStack outputSlot = abstractBlockEntity.getItem(2);
+
         boolean inputSlotHasItemStack = !inputSlotStack.isEmpty();
         boolean outputSlotHasItemStack = !outputSlot.isEmpty();
         boolean fuelSlotHasItemStack = !fuelSlotStack.isEmpty();
+
         Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
         int burnTime = fuelMap.getOrDefault(stackInHand.getItem(), 0);
         int fuelBurnTime = fuelMap.getOrDefault(fuelSlotStack.getItem(), 0);
+
         int inputMaxStackSize = inputSlotStack.getMaxStackSize();
         int inputSlotStackSize = inputSlotStack.getCount();
         int fuelMaxStackSize = fuelSlotStack.getMaxStackSize();
         int fuelStackSize = fuelSlotStack.getCount();
         int stackSize = stackInHand.getCount();
 
-        // if input slot has items no suitable for blasting/smelting/smoking, give them to player
+        // If the input slot has items not suitable for blasting/smelting/smoking, give them to the player
         if (inputSlotHasItemStack && inputSlotProcessingResult.isEmpty()) {
             player.getInventory().add(inputSlotStack);
             inputSlotStack.setCount(0);
         }
-        // if fuel slot has items without burn time, give them to player
+
+        // If the fuel slot has items without burn time, give them to the player
         if (fuelBurnTime == 0) {
             player.getInventory().add(fuelSlotStack);
             fuelSlotStack.setCount(0);
         }
 
-        // if output slot has items, give them to player
+        // If the output slot has items, give them to the player
         if (outputSlotHasItemStack) {
             player.getInventory().add(outputSlot);
         }
 
-        // award experience
+        // Award experience
         abstractBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) player);
 
-        // function that performs the transfer
+        // Function that performs the transfer
         doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
 
         return InteractionResult.CONSUME;
     }
 
-    public static InteractionResult doRightClickInteractions(@NotNull BlockEntity blockEntity, @NotNull Optional<?> recipe, @NotNull Player player, @NotNull InteractionHand hand) {
+    /**
+     * Performs right-click interactions on a block entity in the game.
+     * This method handles various checks and transfers related to the right-click interaction.
+     *
+     * @param blockEntity  The block entity to interact with.
+     * @param recipe       An optional recipe associated with the interaction.
+     * @param player       The player performing the interaction.
+     * @param hand         The hand used for the interaction.
+     * @return             The result of the interaction.
+     */
+    public static InteractionResult doRightClickInteractions(
+            @NotNull BlockEntity blockEntity,
+            @NotNull Optional<?> recipe,
+            @NotNull Player player,
+            @NotNull InteractionHand hand) {
+
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
         ItemStack inputSlotStack = abstractBlockEntity.getItem(0);
         ItemStack fuelSlotStack = abstractBlockEntity.getItem(1);
+
         boolean fuelSlotHasItemStack = !fuelSlotStack.isEmpty();
         Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.getFuel();
         int burnTime = fuelMap.getOrDefault(stackInHand.getItem(), 0);
@@ -74,11 +111,11 @@ public class CommonUtils {
         int fuelStackSize = fuelSlotStack.getCount();
         int stackSize = stackInHand.getCount();
         int half = stackSize / 2;
-        if(stackSize == 1) {
+        if (stackSize == 1) {
             half = 1;
         }
 
-        // function that performs the transfer
+        // Function that performs the transfer
         doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, half, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
 
         return InteractionResult.CONSUME;
