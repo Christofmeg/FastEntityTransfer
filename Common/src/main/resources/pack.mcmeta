@@ -1,6 +1,8 @@
 {
-    "pack": {
-        "description": "§5Fast Entity Transfer",
-        "pack_format": 10
-    }
+  "pack": {
+    "description": {
+      "text": "§5${mod_id} resources"
+    },
+    "pack_format": 15
+  }
 }

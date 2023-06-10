@@ -18,7 +18,7 @@ public class FastEntityTransfer implements ModInitializer {
         
         // Some code like events require special initialization from the
         // loader specific code.
-        AttackBlockCallback.EVENT.register(CommonClickInteractions::onLeftClickBlock);
-        UseBlockCallback.EVENT.register(CommonClickInteractions::onRightClickBlock);
+//        AttackBlockCallback.EVENT.register(CommonClickInteractions::onLeftClickBlock);
+ //       UseBlockCallback.EVENT.register(CommonClickInteractions::onRightClickBlock);
     }
 }

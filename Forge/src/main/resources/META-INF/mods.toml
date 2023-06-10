@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[46,)"
 issueTrackerURL="https://github.com/Christofmeg/FastEntityTransfer/issues" #optional
 license="The MIT License (MIT)"
 [[mods]]
@@ -14,12 +14,12 @@ description="Factorio styled Fast Entity Transfer. CTRL + LEFT/RIGHT CLICK with 
 [[dependencies.fastentitytransfer]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[46,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.fastentitytransfer]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"

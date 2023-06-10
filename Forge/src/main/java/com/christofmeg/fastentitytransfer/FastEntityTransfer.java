@@ -1,11 +1,14 @@
 package com.christofmeg.fastentitytransfer;
 
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.InteractionResult;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.RegistryManager;
 
 /**
  * The FastEntityTransfer class is the main class of the mod.
@@ -19,6 +22,7 @@ public class FastEntityTransfer {
      * Represents the state of the control key.
      */
     public static boolean isCtrlKeyDown = false;
+    static RegistryAccess registryAccess;
 
     /**
      * Constructs a new instance of the FastEntityTransfer class.
@@ -35,6 +39,11 @@ public class FastEntityTransfer {
         CommonClickInteractions.init();
     }
 
+    @SubscribeEvent
+    public static void onSetup(FMLCommonSetupEvent event) {
+        registryAccess = (RegistryAccess) RegistryManager.ACTIVE;
+    }
+
     /**
      * Event handler for the LeftClickBlock event.
      * This method exists as a wrapper for the code in the Common project.
@@ -43,7 +52,7 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getEntity().getLevel(), event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown);
+        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown, registryAccess);
         if (result == InteractionResult.CONSUME) {
             isCtrlKeyDown = false;
             event.setCanceled(true);
@@ -58,10 +67,11 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getEntity().getLevel(), event.getHand(), event.getHitVec(), isCtrlKeyDown);
+        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec(), isCtrlKeyDown, registryAccess);
         if (result == InteractionResult.CONSUME) {
             isCtrlKeyDown = false;
             event.setCanceled(true);
         }
     }
+
 }
