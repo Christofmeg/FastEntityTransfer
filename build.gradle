@@ -28,6 +28,15 @@ minecraft {
                 }
             }
         }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            mods {
+                fastentitytransfer {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer.platform.services;
 
+@SuppressWarnings("unused")
 public interface IPlatformHelper {
 
     /**
