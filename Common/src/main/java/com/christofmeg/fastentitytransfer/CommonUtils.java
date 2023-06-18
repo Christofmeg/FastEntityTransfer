@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CommonUtils {
@@ -35,7 +36,7 @@ public class CommonUtils {
         int stackSize = stackInHand.getCount();
 
         // if input slot has items no suitable for blasting/smelting/smoking, give them to player
-        if (inputSlotHasItemStack && inputSlotProcessingResult.isEmpty()) {
+        if (inputSlotHasItemStack && !inputSlotProcessingResult.isPresent()) {
             player.getInventory().add(inputSlotStack);
             inputSlotStack.setCount(0);
         }
@@ -289,7 +290,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
@@ -300,7 +301,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
