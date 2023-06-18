@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CommonUtils {
@@ -29,11 +29,11 @@ public class CommonUtils {
      * @return                       The result of the interaction.
      */
     public static InteractionResult doLeftClickInteractions(
-            @NotNull BlockEntity blockEntity,
-            @NotNull Optional<?> recipe,
-            @NotNull Optional<?> inputSlotProcessingResult,
-            @NotNull Player player,
-            @NotNull InteractionHand hand) {
+            BlockEntity blockEntity,
+            Optional<?> recipe,
+            Optional<?> inputSlotProcessingResult,
+            Player player,
+            InteractionHand hand) {
 
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
@@ -92,10 +92,10 @@ public class CommonUtils {
      * @return             The result of the interaction.
      */
     public static InteractionResult doRightClickInteractions(
-            @NotNull BlockEntity blockEntity,
-            @NotNull Optional<?> recipe,
-            @NotNull Player player,
-            @NotNull InteractionHand hand) {
+            BlockEntity blockEntity,
+            Optional<?> recipe,
+            Player player,
+            InteractionHand hand) {
 
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
@@ -327,7 +327,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
@@ -338,7 +338,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
