@@ -1,7 +1,6 @@
 package com.christofmeg.fastentitytransfer;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
@@ -11,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CommonUtils {
@@ -50,7 +50,7 @@ public class CommonUtils {
         }
 
         // award experience
-        abstractTileEntity.awardUsedRecipesAndPopExperience((ServerPlayerEntity) player);
+        abstractTileEntity.awardUsedRecipesAndPopExperience(player);
 
         // function that performs the transfer
         doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractTileEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
@@ -288,7 +288,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
@@ -299,7 +299,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
@@ -307,7 +307,7 @@ public class CommonUtils {
         return true;
     }
 
-    public static enum PrivateInteractionResult {
+    public enum PrivateInteractionResult {
         CONSUME,
         PASS,
     }
