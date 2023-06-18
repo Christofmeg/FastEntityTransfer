@@ -26,10 +26,9 @@ public class CommonClickInteractions {
     // invoked from a mod loader specific project like Forge or Fabric.
     public static void init() {}
 
-    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
+    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection, boolean isSprintKeyDown) {
         ItemStack stack = player.getItemInHand(hand);
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
         if (!level.isClientSide() && isSprintKeyDown) {
             if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
@@ -45,11 +44,10 @@ public class CommonClickInteractions {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult, boolean isSprintKeyDown) {
         ItemStack stack = player.getItemInHand(hand);
         BlockPos pos = blockHitResult.getBlockPos();
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
         if (!level.isClientSide() && isSprintKeyDown) {
             if (blockEntity instanceof SmokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
