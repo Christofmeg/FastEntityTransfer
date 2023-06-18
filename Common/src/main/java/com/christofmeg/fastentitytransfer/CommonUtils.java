@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CommonUtils {
@@ -327,7 +328,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
@@ -338,7 +339,7 @@ public class CommonUtils {
                 return false;
             }
 
-            if (!tag1.get(key).equals(tag2.get(key))) {
+            if (!Objects.equals(tag1.get(key), tag2.get(key))) {
                 return false;
             }
         }
