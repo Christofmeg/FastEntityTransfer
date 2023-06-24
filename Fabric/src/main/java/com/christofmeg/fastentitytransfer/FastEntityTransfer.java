@@ -1,24 +1,45 @@
 package com.christofmeg.fastentitytransfer;
 
+import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 
 public class FastEntityTransfer implements ModInitializer {
-    
+
+    public static final ResourceLocation CTRL_KEY_PACKET_ID = new ResourceLocation(CommonConstants.MOD_ID, "ctrl_key_is_down");
+
+    public static boolean isSprintKeyDown = false;
+
     @Override
     public void onInitialize() {
-        
-        // This method is invoked by the Fabric mod loader when it is ready
-        // to load your mod. You can access Fabric and Common code in this
-        // project.
-
-        // Use Fabric to bootstrap the Common mod.
+        PacketHandler.registerPackets();
         CommonClickInteractions.init();
-        
-        // Some code like events require special initialization from the
-        // loader specific code.
-//        AttackBlockCallback.EVENT.register(CommonClickInteractions::onLeftClickBlock);
-//        UseBlockCallback.EVENT.register(CommonClickInteractions::onRightClickBlock);
+
+        AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) -> {
+            if(isSprintKeyDown) {
+                InteractionResult result = CommonClickInteractions.onLeftClickBlock(player, level, hand, pos, direction, true);
+                if (result == InteractionResult.CONSUME) {
+                    isSprintKeyDown = false;
+                    return result;
+                }
+            }
+            return InteractionResult.PASS;
+        });
+
+        UseBlockCallback.EVENT.register((player, level, hand, blockHitResult) -> {
+            if(isSprintKeyDown) {
+                InteractionResult result = CommonClickInteractions.onRightClickBlock(player, level, hand, blockHitResult, true);
+                if (result == InteractionResult.CONSUME) {
+                    isSprintKeyDown = false;
+                    return result;
+                }
+            }
+            return InteractionResult.PASS;
+        });
+
     }
+
 }
