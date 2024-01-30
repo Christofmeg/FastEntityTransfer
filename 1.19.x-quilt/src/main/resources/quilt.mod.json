@@ -5,7 +5,7 @@
     "id": "fastentitytransfer",
     "version": "${version}",
     "metadata": {
-      "name": "${mod_name}",
+      "name": "Fast Entity Transfer",
       "description": "Factorio styled Fast Entity Transfer. CTRL + LEFT/RIGHT CLICK with items that are suitable for Blasting/Smelting/Smoking.",
       "contributors": {
         "Christofmeg": "Developer"

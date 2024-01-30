@@ -51,16 +51,21 @@ subprojects { Project p ->
 
         pAfter.modrinth {
             try {
-                token = file('../../API Tokens/modrinth.md').text
+                token = file('../API Tokens/modrinth.md').text
             } catch (Exception ignored) {
                 token = ""
+                System.err("Could not get Modrinth token")
             }
             projectId = "${modrinth_id}"
             loaders = [ projectExt.platform.get().toLowerCase(Locale.ROOT) ]
-            gameVersions = projectExt.versionsForCurseForgeAndModrinth.getOrElse([])
-            uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
             versionNumber = project.version
+            versionName = getArchivesBaseName() + "-" + getVersion()
             versionType = "${release_type}"
+            if (!pAfter.name.endsWith('common')) {
+                changelog = file("${project.getName()}/changelog.md").text
+            }
+            uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
+            gameVersions = projectExt.versionsForCurseForgeAndModrinth.getOrElse([])
         }
         if ("Vanilla" == projectExt.platform.get()) {
             // Disable modrinth task for common sub-projects
@@ -71,18 +76,19 @@ subprojects { Project p ->
             pAfter.tasks.register('publishCurseForge', TaskPublishCurseForge) {
                 group = 'publishing'
                 disableVersionDetection()
-                apiToken = file('../../API Tokens/fastentitytransfer.md') != null ? file('../../API Tokens/fastentitytransfer.md') : ""
+                apiToken = file('../API Tokens/fastentitytransfer.md') != null ? file('../API Tokens/fastentitytransfer.md') : ""
                 def projectId = "${cf_id}".toString()
                 def mainFile = upload(projectId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
                 mainFile.changelogType = 'markdown'
-                mainFile.changelog = file('changelog.md')
+                if (!pAfter.name.endsWith('common')) {
+                    mainFile.changelog = file("${project.getName()}/changelog.md").text
+                }
                 mainFile.addGameVersion('Client', 'Server')
                 mainFile.addModLoader(projectExt.platform.get())
                 projectExt.versionsForCurseForgeAndModrinth.getOrElse([]).each {
                     mainFile.addGameVersion(it)
                 }
-                mainFile.releaseType = 'release'
-                mainFile.changelog = 'Bug fixes'
+                mainFile.releaseType = "${release_type}"
             }
         }
     }
