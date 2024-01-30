@@ -1,16 +1,48 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        mavenCentral()
+        maven {
+            name = 'Architectury'
+            url = "https://maven.architectury.dev/"
+        }
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
         maven {
+            name = 'Forge'
+            url "https://files.minecraftforge.net/maven/"
+        }
+        maven {
+            name = 'Quilt'
+            url = 'https://maven.quiltmc.org/repository/release'
+        }
+        maven {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.toString() == 'org.spongepowered.mixin') {
+                useModule("org.spongepowered:mixingradle:${requested.version}")
+            }
         }
     }
 }
 
-rootProject.name = 'FastEntityTransfer'
-include("Common", "Fabric", "Forge")
+rootProject.name = 'Fast Entity Transfer'
+
+//include('1.14.4-base', '1.14.4-forge', '1.14.4-fabric')
+//include('1.15.2-base', '1.15.2-forge', '1.15.2-fabric')
+//include('1.16.5-base', '1.16.5-forge', '1.16.5-fabric')
+//include('1.17.1-base', '1.17.1-forge', '1.17.1-fabric')
+//include'1.18.1-base', '1.18.1-forge', '1.18.1-fabric', '1.18.1-quilt') // TODO
+//include('1.18.2-base', '1.18.2-forge', '1.18.2-fabric', '1.18.2-quilt')
+include('1.19.x-common', '1.19.x-forge', '1.19.x-fabric', '1.19.x-quilt')
+

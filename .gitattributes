@@ -1,2 +1,5 @@
+# Keep CRLF for *.bat files which are for Windows.
+# Ref: https://stackoverflow.com/questions/21822650
+*.bat -crlf
 # Auto detect text files and perform LF normalization
 * text=auto

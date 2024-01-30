@@ -1,0 +1,73 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+platformInfo {
+    minecraftVersion = '1.19.2'
+    platform = 'Forge'
+    versionsForCurseForgeAndModrinth = [ '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4' ]
+    supportedVersions = '1.19.x'
+}
+
+repositories {
+}
+
+minecraft {
+    mappings channel: 'official', version: '1.19.2'
+
+    runs {
+        client {
+            workingDirectory file('./run-client')
+            property 'forge.logging.console.level', 'info'
+            property 'fml.earlyprogresswindow', 'false'
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                examplemod {
+                    source sourceSets.main
+                    source project(":1.19.x-common").sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory file('./run-server')
+            property 'forge.logging.console.level', 'info'
+            property 'fml.earlyprogresswindow', 'false'
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                examplemod {
+                    source sourceSets.main
+                    source project(":1.19.x-common").sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('../run')
+            property 'fml.earlyprogresswindow', 'false'
+            ideaModule "${rootProject.name}.${project.name}.main"
+            forceExit false
+            mods {
+                examplemod {
+                    source sourceSets.main
+                    source project(":1.19.x-common").sourceSets.main
+                }
+            }
+            args '--mod', 'examplemod', '--all', '--output', '"' + file('src/generated/resources/') + '"'
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:1.19.2-43.3.0"
+    compileOnly project(":1.19.x-common")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+jar {
+    finalizedBy 'reobfJar'
+}

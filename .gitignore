@@ -1,4 +1,17 @@
-# eclipse
+# Gradle caches
+.gradle
+build
+*/.gradle/**
+*/build/**
+
+# Working directory for game run within IDE
+*/run-client
+*/run-server
+*/run-data
+
+# Eclipse
+.classpath
+.eclipse
 bin
 *.launch
 .settings
@@ -6,16 +19,15 @@ bin
 .classpath
 .project
 
-# idea
+# IntelliJ IDEA
 out
 *.ipr
 *.iws
 *.iml
 .idea
 
-# gradle
-build
-.gradle
+# VSCode
+.vscode
 
 # other
 eclipse
