@@ -50,9 +50,7 @@ public class SprintKeyPacket {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
             // Process the packet on the server-side
-            if (packet.isSprintKeyDown) {
-                FastEntityTransfer.isCtrlKeyDown = true;
-            }
+            FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;
         });
         context.setPacketHandled(true);
     }

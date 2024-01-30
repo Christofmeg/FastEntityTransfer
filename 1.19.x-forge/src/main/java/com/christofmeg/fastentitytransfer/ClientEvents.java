@@ -25,9 +25,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        if (isCtrlKeyDown) {
-            PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
-        }
+        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
     }
 
     /**
@@ -39,8 +37,6 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        if (isCtrlKeyDown) {
-            PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
-        }
+        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
     }
 }
