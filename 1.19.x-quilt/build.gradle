@@ -3,7 +3,6 @@ plugins {
 }
 
 platformInfo {
-    minecraftVersion = '1.19.2'
     platform = 'Quilt'
     versionsForCurseForgeAndModrinth = [ '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4' ]
     supportedVersions = '1.19.x'
@@ -12,11 +11,11 @@ platformInfo {
 loom {
     runs {
         client {
-            runDir './run-client'
+            runDir 'run'
         }
 
         server {
-            runDir './run-server'
+            runDir 'run'
         }
 
         configureEach {

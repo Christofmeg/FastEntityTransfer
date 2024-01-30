@@ -4,7 +4,6 @@ plugins {
 }
 
 platformInfo {
-    minecraftVersion = '1.19.2'
     platform = 'Fabric'
     versionsForCurseForgeAndModrinth = [ '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4' ]
     supportedVersions = '1.19.x'
@@ -13,11 +12,11 @@ platformInfo {
 loom {
     runs {
         client {
-            runDir './run-client'
+            runDir 'run'
         }
 
         server {
-            runDir './run-server'
+            runDir 'run'
         }
 
         gameTest {
@@ -28,7 +27,7 @@ loom {
         datagen {
             client()
             vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.modid=examplemod"
+            vmArg "-Dfabric-api.datagen.modid=fastentitytransfer"
             vmArg "-Dfabric-api.datagen.output-dir=${file("./src/generated/resources")}"
         }
 

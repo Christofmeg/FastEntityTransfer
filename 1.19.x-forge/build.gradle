@@ -4,7 +4,6 @@ plugins {
 }
 
 platformInfo {
-    minecraftVersion = '1.19.2'
     platform = 'Forge'
     versionsForCurseForgeAndModrinth = [ '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4' ]
     supportedVersions = '1.19.x'
@@ -18,12 +17,11 @@ minecraft {
 
     runs {
         client {
-            workingDirectory file('./run-client')
-            property 'forge.logging.console.level', 'info'
-            property 'fml.earlyprogresswindow', 'false'
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
             mods {
-                examplemod {
+                modClientRuns {
                     source sourceSets.main
                     source project(":1.19.x-common").sourceSets.main
                 }
@@ -31,31 +29,17 @@ minecraft {
         }
 
         server {
-            workingDirectory file('./run-server')
-            property 'forge.logging.console.level', 'info'
-            property 'fml.earlyprogresswindow', 'false'
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
             mods {
-                examplemod {
+                modServerRun {
                     source sourceSets.main
                     source project(":1.19.x-common").sourceSets.main
                 }
             }
         }
 
-        data {
-            workingDirectory project.file('../run')
-            property 'fml.earlyprogresswindow', 'false'
-            ideaModule "${rootProject.name}.${project.name}.main"
-            forceExit false
-            mods {
-                examplemod {
-                    source sourceSets.main
-                    source project(":1.19.x-common").sourceSets.main
-                }
-            }
-            args '--mod', 'examplemod', '--all', '--output', '"' + file('src/generated/resources/') + '"'
-        }
     }
 }
 
