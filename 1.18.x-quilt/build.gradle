@@ -1,0 +1,46 @@
+plugins {
+    id 'org.quiltmc.loom' version '1.0.+'
+}
+
+platformInfo {
+    platform = 'Quilt'
+    versionsForCurseForgeAndModrinth = [ '1.18', '1.18.1', '1.18.2' ]
+    supportedVersions = '1.18.x'
+}
+
+loom {
+    runs {
+        client {
+            runDir 'run'
+        }
+
+        server {
+            runDir 'run'
+        }
+
+        configureEach {
+            ideConfigGenerated(true)
+        }
+    }
+}
+
+repositories {
+}
+
+dependencies {
+    minecraft 'com.mojang:minecraft:1.18.2'
+    mappings loom.officialMojangMappings()
+    modImplementation 'org.quiltmc:quilt-loader:0.17.6'
+    modImplementation 'org.quiltmc.quilted-fabric-api:quilted-fabric-api:1.0.0-beta.28+0.67.0-1.18.2'
+    compileOnly project(":1.18.x-common")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+jar {
+    filesMatching('LICENSE') {
+        rename '^(LICENSE.*?)(\\..*)?$', "\$1_${archivesBaseName}\$2"
+    }
+}
