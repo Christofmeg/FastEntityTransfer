@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
  * The ClientEvents class handles client-side events related to left and right click interactions.
  * It subscribes to Forge's event bus for handling these events on the client-side.
  */
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 

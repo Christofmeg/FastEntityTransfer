@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +35,9 @@ public class CommonUtils {
             @NotNull Optional<?> recipe,
             @NotNull Optional<?> inputSlotProcessingResult,
             @NotNull Player player,
-            @NotNull InteractionHand hand) {
+            @NotNull InteractionHand hand,
+            @NotNull RegistryAccess registryAccess
+    ) {
 
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
@@ -77,7 +80,7 @@ public class CommonUtils {
         abstractBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) player);
 
         // Function that performs the transfer
-        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
+        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, stackSize, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, registryAccess);
 
         return InteractionResult.CONSUME;
     }
@@ -96,7 +99,8 @@ public class CommonUtils {
             @NotNull BlockEntity blockEntity,
             @NotNull Optional<?> recipe,
             @NotNull Player player,
-            @NotNull InteractionHand hand) {
+            @NotNull InteractionHand hand,
+            @NotNull RegistryAccess registryAccess) {
 
         AbstractFurnaceBlockEntity abstractBlockEntity = ((AbstractFurnaceBlockEntity) blockEntity);
         ItemStack stackInHand = player.getItemInHand(hand);
@@ -117,12 +121,12 @@ public class CommonUtils {
         }
 
         // Function that performs the transfer
-        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, half, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack);
+        doTransfers(stackInHand, burnTime, fuelSlotStack, stackSize, half, abstractBlockEntity, player, fuelStackSize, fuelMaxStackSize, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, registryAccess);
 
         return InteractionResult.CONSUME;
     }
 
-    private static void doTransfers(ItemStack stackInHand, int burnTime, ItemStack fuelSlotStack, int stackSize, int half, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, int fuelStackSize, int fuelMaxStackSize, Optional<?> recipe, ItemStack inputSlotStack, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack) {
+    private static void doTransfers(ItemStack stackInHand, int burnTime, ItemStack fuelSlotStack, int stackSize, int half, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, int fuelStackSize, int fuelMaxStackSize, Optional<?> recipe, ItemStack inputSlotStack, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack, RegistryAccess registryAccess) {
         //transfer nbt tags to new item stack
         ItemStack newItemStack = stackInHand.copy();
 
@@ -139,7 +143,7 @@ public class CommonUtils {
             }
 
             else {
-                doIfHasBurntime(fuelSlotStack, stackInHand, fuelStackSize, fuelMaxStackSize, abstractBlockEntity, player, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, inputSlotStack, stackSize, half, newItemStack);
+                doIfHasBurntime(fuelSlotStack, stackInHand, fuelStackSize, fuelMaxStackSize, abstractBlockEntity, player, recipe, inputSlotStack, inputSlotStackSize, inputMaxStackSize, fuelSlotHasItemStack, inputSlotStack, stackSize, half, newItemStack, registryAccess);
             }
         }
 
@@ -149,7 +153,8 @@ public class CommonUtils {
         }
     }
 
-    private static void doIfHasBurntime(ItemStack fuelSlotStack, ItemStack stackInHand, int fuelStackSize, int fuelMaxStackSize, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, Optional<?> recipe, ItemStack inputSlot, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack, ItemStack inputSlotStack, int stackSize, int half, ItemStack newItemStack) {
+    private static void doIfHasBurntime(ItemStack fuelSlotStack, ItemStack stackInHand, int fuelStackSize, int fuelMaxStackSize, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, Optional<?> recipe, ItemStack inputSlot, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack, ItemStack inputSlotStack, int stackSize, int half, ItemStack newItemStack,
+                                        RegistryAccess registryAccess) {
 
         ItemStack tempItemStack = stackInHand.copy();
         ItemStack tempFuelSlotStack= fuelSlotStack.copy();
@@ -186,7 +191,7 @@ public class CommonUtils {
 
             // Insert smeltable fuel in input slot if fuel slot is already full of it
             else if (recipe.isPresent()) {
-                ItemStack resultItem = ((AbstractCookingRecipe) recipe.get()).getResultItem();
+                ItemStack resultItem = ((AbstractCookingRecipe) recipe.get()).getResultItem(registryAccess);
                 if (!resultItem.isEmpty()) {
 
                     // if input slot is empty and fuel slot is full, put smeltable fuel in input slot
@@ -232,7 +237,7 @@ public class CommonUtils {
         // in input slot
         else if (recipe.isPresent()) {
             if (fuelSlotHasItemStack && inputSlot.isEmpty()) {
-                ItemStack resultItem = ((AbstractCookingRecipe) recipe.get()).getResultItem();
+                ItemStack resultItem = ((AbstractCookingRecipe) recipe.get()).getResultItem(registryAccess);
                 if (!resultItem.isEmpty()) {
                     newItemStack.setCount(half);
                     abstractBlockEntity.setItem(0, newItemStack);

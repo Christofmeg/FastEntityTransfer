@@ -37,6 +37,11 @@ subprojects { Project p ->
 
         if (!pAfter.name.endsWith('common')) {
             String baseProject = ':' + pAfter.name.substring(0, pAfter.name.indexOf('-')) + '-common'
+
+            if (pAfter.name.substring(0, pAfter.name.indexOf('-')) == "1.20.1") {
+                baseProject = ":1.20.x-common"
+            }
+
             pAfter.compileJava {
                 source(pAfter.project(baseProject).sourceSets.main.allSource)
             }
@@ -66,6 +71,13 @@ subprojects { Project p ->
             }
             uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
             gameVersions = projectExt.versionsForCurseForgeAndModrinth.getOrElse([])
+            dependencies {
+                if (pAfter.name.endsWith('fabric')) {
+                    required.project "fabric-api"
+                } else if (pAfter.name.endsWith('quilt')) {
+                    required.project "qsl"
+                }
+            }
         }
         if ("Vanilla" == projectExt.platform.get()) {
             // Disable modrinth task for common sub-projects
@@ -76,7 +88,12 @@ subprojects { Project p ->
             pAfter.tasks.register('publishCurseForge', TaskPublishCurseForge) {
                 group = 'publishing'
                 disableVersionDetection()
-                apiToken = file('../API Tokens/fastentitytransfer.md') != null ? file('../API Tokens/fastentitytransfer.md') : ""
+                try {
+                    apiToken = file('../API Tokens/fastentitytransfer.md')
+                } catch (Exception ignored) {
+                    apiToken = ""
+                    System.err("Could not get CurseForge token")
+                }
                 def projectId = "${cf_id}".toString()
                 def mainFile = upload(projectId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
                 mainFile.changelogType = 'markdown'
@@ -89,6 +106,11 @@ subprojects { Project p ->
                     mainFile.addGameVersion(it)
                 }
                 mainFile.releaseType = "${release_type}"
+                if (pAfter.name.endsWith('fabric')) {
+                    mainFile.addRequirement("fabric-api")
+                } else if (pAfter.name.endsWith('quilt')) {
+                    mainFile.addRequirement("qsl")
+                }
             }
         }
     }

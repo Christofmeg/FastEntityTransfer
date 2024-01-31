@@ -42,10 +42,7 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:1.20.1"
-    mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
-    }
+    mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:0.14.21"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.83.1+1.20.1"
     compileOnly project(":1.20.x-common")

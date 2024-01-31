@@ -2,6 +2,7 @@ package com.christofmeg.fastentitytransfer;
 
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
  * The FastEntityTransfer class is the main class of the mod.
  * It initializes the mod, registers event subscribers, and provides event handlers for left and right click events.
  */
+@SuppressWarnings("unused")
 @Mod(CommonConstants.MOD_ID)
 @Mod.EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class FastEntityTransfer {
@@ -43,7 +45,8 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onLeftClickBlock(LeftClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getEntity().getLevel(), event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown);
+        Level level = event.getLevel();
+        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), level, event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown, level.registryAccess());
         if (result == InteractionResult.CONSUME) {
             isCtrlKeyDown = false;
             event.setCanceled(true);
@@ -58,7 +61,8 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onRightClickBlock(RightClickBlock event) {
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getEntity().getLevel(), event.getHand(), event.getHitVec(), isCtrlKeyDown);
+        Level level = event.getLevel();
+        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), level, event.getHand(), event.getHitVec(), isCtrlKeyDown, level.registryAccess());
         if (result == InteractionResult.CONSUME) {
             isCtrlKeyDown = false;
             event.setCanceled(true);

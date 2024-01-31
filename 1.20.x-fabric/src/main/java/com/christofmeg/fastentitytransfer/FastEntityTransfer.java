@@ -20,7 +20,7 @@ public class FastEntityTransfer implements ModInitializer {
 
         AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) -> {
             if(isSprintKeyDown) {
-                InteractionResult result = CommonClickInteractions.onLeftClickBlock(player, level, hand, pos, direction, true);
+                InteractionResult result = CommonClickInteractions.onLeftClickBlock(player, level, hand, pos, direction, true, level.registryAccess());
                 if (result == InteractionResult.CONSUME) {
                     isSprintKeyDown = false;
                     return result;
@@ -31,7 +31,7 @@ public class FastEntityTransfer implements ModInitializer {
 
         UseBlockCallback.EVENT.register((player, level, hand, blockHitResult) -> {
             if(isSprintKeyDown) {
-                InteractionResult result = CommonClickInteractions.onRightClickBlock(player, level, hand, blockHitResult, true);
+                InteractionResult result = CommonClickInteractions.onRightClickBlock(player, level, hand, blockHitResult, true, level.registryAccess());
                 if (result == InteractionResult.CONSUME) {
                     isSprintKeyDown = false;
                     return result;
