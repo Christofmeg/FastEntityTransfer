@@ -23,7 +23,7 @@ minecraft {
             mods {
                 modClientRuns {
                     source sourceSets.main
-                    source project(":1.20.x-common").sourceSets.main
+                    source project(":1.20.2-common").sourceSets.main
                 }
             }
         }
@@ -35,7 +35,7 @@ minecraft {
             mods {
                 modServerRun {
                     source sourceSets.main
-                    source project(":1.20.x-common").sourceSets.main
+                    source project(":1.20.2-common").sourceSets.main
                 }
             }
         }
@@ -44,8 +44,8 @@ minecraft {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.20.1-48.1.0"
-    compileOnly project(":1.20.x-common")
+    minecraft "net.minecraftforge:forge:1.20.2-48.1.0"
+    compileOnly project(":1.20.2-common")
 }
 
 tasks.withType(JavaCompile).configureEach {

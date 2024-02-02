@@ -2,7 +2,6 @@ package com.christofmeg.fastentitytransfer.network;
 
 import com.christofmeg.fastentitytransfer.FastEntityTransfer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

@@ -1,9 +1,8 @@
 package com.christofmeg.fastentitytransfer.network;
 
-import com.christofmeg.fastentitytransfer.CommonConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.SimpleChannel;
 
 public class PacketHandler {
 
@@ -12,7 +11,7 @@ public class PacketHandler {
     /**
      * The main network channel used for packet communication.
      */
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+    public static final SimpleChannel CHANNEL = NetworkRegistry.findTarget(
             new ResourceLocation(CommonConstants.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,

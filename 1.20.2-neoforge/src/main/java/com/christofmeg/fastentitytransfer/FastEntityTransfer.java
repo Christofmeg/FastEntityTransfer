@@ -3,10 +3,9 @@ package com.christofmeg.fastentitytransfer;
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * The FastEntityTransfer class is the main class of the mod.
@@ -44,7 +43,7 @@ public class FastEntityTransfer {
      * @param event The LeftClickBlock event.
      */
     @SubscribeEvent
-    public static void onLeftClickBlock(LeftClickBlock event) {
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         Level level = event.getLevel();
         InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), level, event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown, level.registryAccess());
         if (result == InteractionResult.CONSUME) {
@@ -60,7 +59,7 @@ public class FastEntityTransfer {
      * @param event The RightClickBlock event.
      */
     @SubscribeEvent
-    public static void onRightClickBlock(RightClickBlock event) {
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
         InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), level, event.getHand(), event.getHitVec(), isCtrlKeyDown, level.registryAccess());
         if (result == InteractionResult.CONSUME) {

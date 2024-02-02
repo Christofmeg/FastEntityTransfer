@@ -3,11 +3,11 @@ package com.christofmeg.fastentitytransfer;
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import com.christofmeg.fastentitytransfer.network.SprintKeyPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * The ClientEvents class handles client-side events related to left and right click interactions.

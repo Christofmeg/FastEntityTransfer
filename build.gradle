@@ -1,6 +1,8 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
+    id 'java-library'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'net.darkhax.curseforgegradle' version '1.+' apply false
 }
@@ -13,7 +15,9 @@ interface PlatformInfoExtension {
 
 subprojects { Project p ->
     apply plugin: 'java'
-    apply plugin: 'idea'
+    if (!p.name.endsWith('2-neoforge')) {
+        apply plugin: 'idea'
+    }
     apply plugin: 'com.modrinth.minotaur' // https://stackoverflow.com/a/50153617
     apply plugin: 'net.darkhax.curseforgegradle'
 

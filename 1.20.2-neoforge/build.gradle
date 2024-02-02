@@ -1,6 +1,5 @@
 plugins {
-    id 'net.neoforged.gradle' version '[6.0.13,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.71'
 }
 
 platformInfo {
@@ -12,39 +11,26 @@ platformInfo {
 repositories {
 }
 
-minecraft {
-    mappings channel: 'official', version: '1.20.2'
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            mods {
-                modClientRuns {
-                    source sourceSets.main
-                    source project(":1.20.2-common").sourceSets.main
-                }
-            }
-        }
+        modSource project.sourceSets.main
+    }
 
-        server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                    source project(":1.20.2-common").sourceSets.main
-                }
-            }
-        }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
     }
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:1.20.2-20.2.88"
+    implementation "net.neoforged:neoforge:20.2.88"
     compileOnly project(":1.20.2-common")
 }
 
