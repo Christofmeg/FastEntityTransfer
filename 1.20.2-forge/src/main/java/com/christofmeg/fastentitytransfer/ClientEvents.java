@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
 /**
  * The ClientEvents class handles client-side events related to left and right click interactions.
@@ -26,7 +27,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        PacketHandler.CHANNEL.send(new SprintKeyPacket(isCtrlKeyDown), PacketDistributor.SERVER.noArg());
     }
 
     /**
@@ -38,6 +39,6 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        PacketHandler.CHANNEL.send(new SprintKeyPacket(isCtrlKeyDown), PacketDistributor.SERVER.noArg());
     }
 }

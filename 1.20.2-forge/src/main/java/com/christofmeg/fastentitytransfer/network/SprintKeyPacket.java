@@ -2,8 +2,7 @@ package com.christofmeg.fastentitytransfer.network;
 
 import com.christofmeg.fastentitytransfer.FastEntityTransfer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkContext;
-import net.minecraftforge.network.NetworkInstance;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
  * The SprintKeyPacket class represents a network packet for sending the state of the sprint key from the client to the server.
@@ -45,9 +44,7 @@ public class SprintKeyPacket {
      * @param packet The received SprintKeyPacket.
      * @param contextSupplier A supplier for obtaining the network event context.
      */
-    public static void handle(SprintKeyPacket packet, NetworkContext contextSupplier) {
-        contextSupplier.
-        NetworkEvent.Context context = contextSupplier.get();
+    public static void handle(SprintKeyPacket packet, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             // Process the packet on the server-side
             FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;

@@ -2,20 +2,22 @@ package com.christofmeg.fastentitytransfer.network;
 
 import com.christofmeg.fastentitytransfer.CommonConstants;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.SimpleChannel;
 
 public class PacketHandler {
 
-    private static final String PROTOCOL_VERSION = "1";
+    private static final int PROTOCOL_VERSION = 1;
 
     /**
      * The main network channel used for packet communication.
      */
-    public static final SimpleChannel CHANNEL = NetworkRegistry.findTarget(
-            new ResourceLocation(CommonConstants.MOD_ID, "main"),
-            () -> PROTOCOL_VERSION, PROTOCOL_VERSION, PROTOCOL_VERSION
-    );
+    public static final SimpleChannel CHANNEL = ChannelBuilder.named(
+            new ResourceLocation(CommonConstants.MOD_ID, "main"))
+            .serverAcceptedVersions(((status, version) -> true))
+            .clientAcceptedVersions(((status, version) -> true))
+            .networkProtocolVersion(PROTOCOL_VERSION)
+            .simpleChannel();
 
     /**
      * Registers the network packets.
@@ -23,8 +25,10 @@ public class PacketHandler {
      * This is required for servers to prevent crashes with client-side calls to Minecraft.getInstance().
      */
     public static void registerPackets() {
-        int packetId = 0;
-        CHANNEL.registerMessage(packetId++, SprintKeyPacket.class, SprintKeyPacket::encode, SprintKeyPacket::decode, SprintKeyPacket::handle);
-        CHANNEL.messageBuilder(SprintKeyPacket.class).encoder(SprintKeyPacket::encode).decoder(SprintKeyPacket::decode);
+        CHANNEL.messageBuilder(SprintKeyPacket.class)
+                .encoder(SprintKeyPacket::encode)
+                .decoder(SprintKeyPacket::decode)
+                .consumerMainThread(SprintKeyPacket::handle)
+                .add();
     }
 }
