@@ -12,9 +12,9 @@ authors="Christofmeg"
 credits="Abbie"
 description="Factorio styled Fast Entity Transfer. CTRL + LEFT/RIGHT CLICK with items that are suitable for Blasting/Smelting/Smoking."
 [[dependencies.fastentitytransfer]]
-    modId="forge"
+    modId="neoforge"
     mandatory=true
-    versionRange="[1,)"
+    versionRange="[20.2,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.fastentitytransfer]]

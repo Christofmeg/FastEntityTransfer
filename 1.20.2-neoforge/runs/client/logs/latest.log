@@ -1,0 +1,72 @@
+[05Feb2024 10:37:21.741] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, 20.2.86, --assetIndex, asset-index, --assetsDir, C:\Users\Sandersen\.gradle\caches\minecraft\assets\1.20.2, --gameDir, ., --fml.neoForgeVersion, 20.2.86, --fml.fmlVersion, 1.0.16, --fml.mcVersion, 1.20.2, --fml.neoFormVersion, 20231019.002635]
+[05Feb2024 10:37:21.748] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.6 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
+[05Feb2024 10:37:21.947] [main/WARN] [net.neoforged.fml.loading.FMLConfig/CORE]: Configuration file C:\Users\Sandersen\Desktop\FastEntityTransfer\1.20.2-neoforge\runs\client\config\fml.toml is not correct. Correcting
+[05Feb2024 10:37:21.950] [main/INFO] [net.neoforged.fml.loading.FMLConfig/CORE]: Incorrect key [disableConfigWatcher] was corrected from null to false
+[05Feb2024 10:37:21.951] [main/INFO] [net.neoforged.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
+[05Feb2024 10:37:21.952] [main/INFO] [net.neoforged.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
+[05Feb2024 10:37:22.002] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[05Feb2024 10:37:22.152] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[05Feb2024 10:37:22.381] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[05Feb2024 10:37:22.516] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Sandersen/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23145!/ Service=ModLauncher Env=CLIENT
+[05Feb2024 10:37:22.531] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: AMD Radeon(TM) Graphics GL version 4.6.0 Core Profile Context 23.4.3.230420, ATI Technologies Inc.
+[05Feb2024 10:37:22.948] [main/WARN] [net.neoforged.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Sandersen\.gradle\caches\modules-2\files-2.1\net.neoforged.fancymodloader\language-minecraft\1.0.16\c1f7785ff7fc0b18aa6d2d4056dcff4fee1b32be\language-minecraft-1.0.16.jar is missing mods.toml file
+[05Feb2024 10:37:22.958] [main/WARN] [net.neoforged.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Sandersen\.gradle\caches\modules-2\files-2.1\net.neoforged.fancymodloader\language-java\1.0.16\2ddedcd8a488fd73e3e92a59949845e9c3a7d9f2\language-java-1.0.16.jar is missing mods.toml file
+[05Feb2024 10:37:22.966] [main/WARN] [net.neoforged.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Sandersen\.gradle\caches\modules-2\files-2.1\net.neoforged.fancymodloader\core\1.0.16\6bab0913ca1635a8e272ef89c17befb52115a3c2\core-1.0.16.jar is missing mods.toml file
+[05Feb2024 10:37:22.974] [main/WARN] [net.neoforged.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Sandersen\.gradle\caches\modules-2\files-2.1\net.neoforged.fancymodloader\language-lowcode\1.0.16\e627c78870d4286826c4b14c0137319ff03b4e0\language-lowcode-1.0.16.jar is missing mods.toml file
+[05Feb2024 10:37:23.006] [main/ERROR] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/SCAN]: Locator net.neoforged.fml.loading.moddiscovery.MinecraftLocator@589b028e found an invalid mod file net.neoforged.fml.loading.moddiscovery.ModFileInfo@7dc51783
+net.neoforged.fml.loading.moddiscovery.InvalidModFileException: Illegal version number specified version (main)
+	at net.neoforged.fml.loading.moddiscovery.ModInfo.<init>(ModInfo.java:77) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModFileInfo.lambda$new$2(ModFileInfo.java:85) ~[loader-1.0.16.jar:1.0]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197) ~[?:?]
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622) ~[?:?]
+	at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627) ~[?:?]
+	at net.neoforged.fml.loading.moddiscovery.ModFileInfo.<init>(ModFileInfo.java:86) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModFileParser.modsTomlParser(ModFileParser.java:47) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModFileParser.readModList(ModFileParser.java:31) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModFile.<init>(ModFile.java:72) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModFile.<init>(ModFile.java:61) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.AbstractModProvider.createMod(AbstractModProvider.java:48) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.MinecraftLocator.lambda$scanMods$4(MinecraftLocator.java:51) ~[loader-1.0.16.jar:1.0]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197) ~[?:?]
+	at java.util.AbstractList$RandomAccessSpliterator.forEachRemaining(AbstractList.java:720) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:310) ~[?:?]
+	at java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622) ~[?:?]
+	at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627) ~[?:?]
+	at net.neoforged.fml.loading.moddiscovery.MinecraftLocator.scanMods(MinecraftLocator.java:55) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.moddiscovery.ModDiscoverer.discoverMods(ModDiscoverer.java:75) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.FMLLoader.beginModScan(FMLLoader.java:155) ~[loader-1.0.16.jar:1.0]
+	at net.neoforged.fml.loading.FMLServiceProvider.beginScanning(FMLServiceProvider.java:88) ~[loader-1.0.16.jar:1.0]
+	at cpw.mods.modlauncher.TransformationServiceDecorator.runScan(TransformationServiceDecorator.java:112) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.TransformationServicesHandler.lambda$runScanningTransformationServices$8(TransformationServicesHandler.java:100) ~[modlauncher-10.0.9.jar:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197) ~[?:?]
+	at java.util.HashMap$ValueSpliterator.forEachRemaining(HashMap.java:1779) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616) ~[?:?]
+	at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622) ~[?:?]
+	at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627) ~[?:?]
+	at cpw.mods.modlauncher.TransformationServicesHandler.runScanningTransformationServices(TransformationServicesHandler.java:102) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.TransformationServicesHandler.initializeTransformationServices(TransformationServicesHandler.java:55) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:88) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[05Feb2024 10:37:23.118] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "events-1.0.16.jar" of type GAMELIBRARY with provider net.neoforged.fml.loading.moddiscovery.BuiltinGameLibraryLocator@30e92cb9
+[05Feb2024 10:37:23.217] [main/INFO] [net.neoforged.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!

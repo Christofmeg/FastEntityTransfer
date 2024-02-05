@@ -2,8 +2,8 @@ package com.christofmeg.fastentitytransfer.network;
 
 import com.christofmeg.fastentitytransfer.FastEntityTransfer;
 import net.minecraft.network.FriendlyByteBuf;
-
-import java.util.function.Supplier;
+import net.minecraftforge.network.NetworkContext;
+import net.minecraftforge.network.NetworkInstance;
 
 /**
  * The SprintKeyPacket class represents a network packet for sending the state of the sprint key from the client to the server.
@@ -45,7 +45,8 @@ public class SprintKeyPacket {
      * @param packet The received SprintKeyPacket.
      * @param contextSupplier A supplier for obtaining the network event context.
      */
-    public static void handle(SprintKeyPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(SprintKeyPacket packet, NetworkContext contextSupplier) {
+        contextSupplier.
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
             // Process the packet on the server-side

@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer.network;
 
+import com.christofmeg.fastentitytransfer.CommonConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.SimpleChannel;
@@ -13,9 +14,7 @@ public class PacketHandler {
      */
     public static final SimpleChannel CHANNEL = NetworkRegistry.findTarget(
             new ResourceLocation(CommonConstants.MOD_ID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
+            () -> PROTOCOL_VERSION, PROTOCOL_VERSION, PROTOCOL_VERSION
     );
 
     /**
@@ -26,5 +25,6 @@ public class PacketHandler {
     public static void registerPackets() {
         int packetId = 0;
         CHANNEL.registerMessage(packetId++, SprintKeyPacket.class, SprintKeyPacket::encode, SprintKeyPacket::decode, SprintKeyPacket::handle);
+        CHANNEL.messageBuilder(SprintKeyPacket.class).encoder(SprintKeyPacket::encode).decoder(SprintKeyPacket::decode);
     }
 }

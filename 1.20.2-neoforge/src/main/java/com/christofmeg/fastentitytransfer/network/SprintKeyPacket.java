@@ -46,12 +46,11 @@ public class SprintKeyPacket {
      * @param packet The received SprintKeyPacket.
      * @param contextSupplier A supplier for obtaining the network event context.
      */
-    public static void handle(SprintKeyPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
+    public static void handle(SprintKeyPacket packet, NetworkEvent.Context contextSupplier) {
+        contextSupplier.enqueueWork(() -> {
             // Process the packet on the server-side
             FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;
         });
-        context.setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 }
