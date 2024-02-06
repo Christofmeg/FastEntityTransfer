@@ -11,17 +11,6 @@ platformInfo {
     supportedVersions = '1.20.2'
 }
 
-version = "${version}"
-group = "${group}"
-
-repositories {
-    mavenLocal()
-}
-
-base {
-    archivesName = mod_id
-}
-
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 runs {
@@ -71,13 +60,5 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
-
-tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
-}
-
-jar {
-    finalizedBy 'reobfJar'
 }
