@@ -23,13 +23,13 @@ pluginManagement {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
+        maven { url = 'https://maven.neoforged.net/releases' }
         repositories {
             maven {
                 name = 'ParchmentMC'
                 url = 'https://maven.parchmentmc.org'
             }
         }
-		maven { url = 'https://maven.neoforged.net/releases' }
     }
     resolutionStrategy {
         eachPlugin {
@@ -54,7 +54,8 @@ rootProject.name = 'Fast Entity Transfer'
 //include('1.18.x-common', '1.18.x-fabric', '1.18.x-forge', '1.18.x-quilt')
 //include('1.19.x-common', '1.19.x-fabric', '1.19.x-forge', '1.19.x-quilt')
 //include('1.20.x-common', '1.20.x-fabric', '1.20.1-forge', '1.20.1-neoforge', '1.20.x-quilt')
-include('1.20.2-common', '1.20.2-forge', '1.20.2-neoforge')
+include('1.20.2-common', '1.20.2-forge')
+include('1.20.2-neoforge')
 
 // 1.20.3 quilt. 1.20.4 quilt
 

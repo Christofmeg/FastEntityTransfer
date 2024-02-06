@@ -1,4 +1,7 @@
 plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
     id 'net.neoforged.gradle.userdev' version '7.0.57'
 }
 
@@ -8,16 +11,22 @@ platformInfo {
     supportedVersions = '1.20.2'
 }
 
+version = "${version}"
+group = "${group}"
+
 repositories {
+    mavenLocal()
 }
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 runs {
     configureEach {
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-
         modSource project.sourceSets.main
-        modSource project(":1.20.2-common").sourceSets.main
     }
 
     client {
@@ -36,8 +45,33 @@ runs {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:20.2.86"
-    compileOnly project(":1.20.2-common")
+    implementation "net.neoforged:neoforge:${neo_version}"
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version: minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version: neo_version,
+            neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id,
+            mod_name: mod_name,
+            mod_license: mod_license,
+            mod_version: mod_version,
+            mod_authors: mod_authors,
+            mod_description: mod_description,
+            pack_format_number: pack_format_number,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
 tasks.withType(JavaCompile).configureEach {
