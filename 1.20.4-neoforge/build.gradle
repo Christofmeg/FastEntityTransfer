@@ -7,8 +7,8 @@ plugins {
 
 platformInfo {
     platform = 'NeoForge'
-    versionsForCurseForgeAndModrinth = [ '1.20.2', '1.20.3' ]
-    supportedVersions = '20.2-20.3'
+    versionsForCurseForgeAndModrinth = [ '1.20.4' ]
+    supportedVersions = '20.4'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -16,7 +16,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 runs {
     configureEach {
         modSource project.sourceSets.main
-        modSource project(":1.20.2-common").sourceSets.main
+        modSource project(":1.20.4-common").sourceSets.main
     }
 
     client {
@@ -36,7 +36,7 @@ runs {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    compileOnly project(":1.20.2-common")
+    compileOnly project(":1.20.4-common")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -51,8 +51,7 @@ tasks.withType(ProcessResources).configureEach {
             mod_license: mod_license,
             mod_version: mod_version,
             mod_authors: mod_authors,
-            mod_description: mod_description,
-            pack_format_number: pack_format_number,
+            mod_description: mod_description
     ]
     inputs.properties replaceProperties
 
