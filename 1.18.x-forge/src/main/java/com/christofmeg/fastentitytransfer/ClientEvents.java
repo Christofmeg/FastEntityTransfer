@@ -4,6 +4,7 @@ import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import com.christofmeg.fastentitytransfer.network.SprintKeyPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
@@ -40,9 +41,12 @@ public class ClientEvents {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        if (block instanceof AbstractFurnaceBlock) {
-            boolean isCtrlKeyDown = fastEntityTransferKey.isDown();
-            PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        if (block instanceof AbstractFurnaceBlock && !FastEntityTransfer.isCtrlKeyDown) {
+            if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            } else if (fastEntityTransferKey.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            }
         }
     }
 
@@ -59,9 +63,12 @@ public class ClientEvents {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        if (block instanceof AbstractFurnaceBlock) {
-            boolean isCtrlKeyDown = fastEntityTransferKey.isDown();
-            PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        if (block instanceof AbstractFurnaceBlock && !FastEntityTransfer.isCtrlKeyDown) {
+            if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            } else if (fastEntityTransferKey.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            }
         }
     }
 

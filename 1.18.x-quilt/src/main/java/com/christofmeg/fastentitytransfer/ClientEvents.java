@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
@@ -25,9 +26,12 @@ public class ClientEvents implements ClientModInitializer {
         AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) -> {
             BlockState state = level.getBlockState(pos);
             Block block = state.getBlock();
-            if (block instanceof AbstractFurnaceBlock) {
-                boolean isCtrlKeyDown = fastEntityTransferKey.isDown();
-                SprintKeyPacket.send(isCtrlKeyDown);
+            if (block instanceof AbstractFurnaceBlock && !FastEntityTransfer.isSprintKeyDown) {
+                if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                    SprintKeyPacket.send(true);
+                } else if (fastEntityTransferKey.isDown()) {
+                    SprintKeyPacket.send(true);
+                }
             }
             return InteractionResult.PASS;
         });
@@ -35,9 +39,12 @@ public class ClientEvents implements ClientModInitializer {
         UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
             BlockState state = level.getBlockState(hitResult.getBlockPos());
             Block block = state.getBlock();
-            if (block instanceof AbstractFurnaceBlock) {
-                boolean isCtrlKeyDown = fastEntityTransferKey.isDown();
-                SprintKeyPacket.send(isCtrlKeyDown);
+            if (block instanceof AbstractFurnaceBlock && !FastEntityTransfer.isSprintKeyDown) {
+                if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                    SprintKeyPacket.send(true);
+                } else if (fastEntityTransferKey.isDown()) {
+                    SprintKeyPacket.send(true);
+                }
             }
             return InteractionResult.PASS;
         });

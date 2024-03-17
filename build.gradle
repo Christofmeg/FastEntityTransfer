@@ -21,6 +21,25 @@ subprojects { Project p ->
     apply plugin: 'com.modrinth.minotaur' // https://stackoverflow.com/a/50153617
     apply plugin: 'net.darkhax.curseforgegradle'
 
+    repositories {
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+        maven {
+            url "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+    }
+
     p.extensions.create('platformInfo', PlatformInfoExtension)
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)

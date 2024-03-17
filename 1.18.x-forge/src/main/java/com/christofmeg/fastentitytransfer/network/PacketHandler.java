@@ -24,7 +24,7 @@ public class PacketHandler {
      * This method should be called during mod initialization.
      * This is required for servers to prevent crashes with client-side calls to Minecraft.getInstance().
      */
-    @SuppressWarnings("unused")
+
     public static void registerPackets() {
         int packetId = 0;
         CHANNEL.registerMessage(packetId++, SprintKeyPacket.class, SprintKeyPacket::encode, SprintKeyPacket::decode, SprintKeyPacket::handle);
