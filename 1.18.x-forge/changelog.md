@@ -1,3 +1,3 @@
-Fix [#9](https://github.com/Christofmeg/FastEntityTransfer/issues/9)
+Implement [#10](https://github.com/Christofmeg/FastEntityTransfer/issues/10)
 
-Removed unused files
+Keybinds

@@ -31,6 +31,10 @@
       {
         "id": "minecraft",
         "versions": "~1.18"
+      },
+      {
+        "id": "fabric-key-binding-api-v1",
+        "versions": "*"
       }
     ]
   }
