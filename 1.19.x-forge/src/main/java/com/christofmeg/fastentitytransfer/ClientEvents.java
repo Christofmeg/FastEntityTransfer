@@ -46,7 +46,7 @@ public class ClientEvents {
             } else if (fastEntityTransferKey.isDown()) {
                 PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
             } else {
-                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(false)); //TODO look into why it is sending duplicate packets
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(false));
             }
         }
     }
