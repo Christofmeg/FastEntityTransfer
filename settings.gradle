@@ -48,7 +48,7 @@ rootProject.name = 'Fast Entity Transfer'
 //include('1.18.x-common', '1.18.x-fabric', '1.18.x-forge', '1.18.x-quilt')
 //include('1.19.x-common', '1.19.x-fabric', '1.19.x-forge', '1.19.x-quilt')
 //include('1.20.x-common', '1.20.x-fabric', '1.20.1-forge', '1.20.1-neoforge', '1.20.x-quilt')
-include('1.20.2-common', '1.20.2-forge', '1.20.2-neoforge')
-//include('1.20.3-common', '1.20.3-quilt') //TODO, have to wait for Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) to update
-//include('1.20.4-common', '1.20.4-neoforge') //TODO
-// , '1.20.4-quilt') //TODO, have to wait for Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) to update
+//include('1.20.2-common', '1.20.2-forge', '1.20.2-neoforge')
+//include('1.20.3-common', '1.20.3-quilt') //TODO, have to wait for Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) to update - should be compatible with 1.20.x - have to verify
+include('1.20.4-common', '1.20.4-neoforge') //TODO
+//include('1.20.4-common', '1.20.4-quilt') //TODO, have to wait for Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) to update - should be compatible with 1.20.x - have to verify
