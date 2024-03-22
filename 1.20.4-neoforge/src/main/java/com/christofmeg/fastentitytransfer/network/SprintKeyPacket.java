@@ -1,40 +1,29 @@
 package com.christofmeg.fastentitytransfer.network;
 
-import com.christofmeg.fastentitytransfer.CommonConstants;
-import com.christofmeg.fastentitytransfer.FastEntityTransfer;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import com.christofmeg.fastentitytransfer.CommonClickInteractions;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-import org.jetbrains.annotations.NotNull;
 
-public record SprintKeyPacket(Boolean isSprintKeyDown) implements CustomPacketPayload {
+import java.util.Optional;
 
-    public static final ResourceLocation ID = new ResourceLocation(CommonConstants.MOD_ID, "sprinket_ket_packet");
-    private final boolean isSprintKeyDown;
+/**
+ * The SprintKeyPacket class represents a network packet for sending the state of the sprint key from the client to the server.
+ * This packet is used to handle the sprint key state on the server-side and update the corresponding field in the FastEntityTransfer class.
+ */
+public class SprintKeyPacket {
+    public static final SprintKeyPacket INSTANCE = new SprintKeyPacket();
 
-    public static PacketHitToServer create(FriendlyByteBuf buf) {
-        return new PacketHitToServer ();
+    public static SprintKeyPacket get() {
+        return INSTANCE;
     }
 
-    @Override
-    public void write(@NotNull FriendlyByteBuf buffer) {
-        buffer.writeBoolean(isSprintKeyDown);
-    }
-
-    public static SprintKeyPacket decode(FriendlyByteBuf buffer) {
-        boolean isSprintKeyDown = buffer.readBoolean();
-        return new SprintKeyPacket(isSprintKeyDown);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
-    }
-
-    public void handle(SprintKeyPacket packet, PlayPayloadContext context) {
+    public void handle(final SprintKeyPayload payload, final PlayPayloadContext context) {
         context.workHandler().submitAsync(() -> {
-            FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
+            }
+            CommonClickInteractions.isCtrlKeyDown = payload.isSprintKeyDown();
         });
     }
 }

@@ -1,9 +1,7 @@
 package com.christofmeg.fastentitytransfer;
 
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
-import com.christofmeg.fastentitytransfer.network.SprintKeyPacket;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -19,17 +17,17 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 public class FastEntityTransfer {
 
     /**
-     * Represents the state of the control key.
-     */
-    public static boolean isCtrlKeyDown = false;
-
-    /**
      * Constructs a new instance of the FastEntityTransfer class.
      * This method is invoked by the Forge mod loader when it is ready to load the mod.
      * It initializes the mod, registers packets, and sets up common interactions.
      */
-    public FastEntityTransfer() {
+    public FastEntityTransfer(IEventBus modEventBus) {
         CommonClickInteractions.init();
+
+        modEventBus.addListener(PacketHandler::registerPackets);
+//        if (FMLLoader.getDist().isClient()) {
+//            modEventBus.addListener(ClientEvents::init);
+//        }
     }
 
     /**
@@ -40,10 +38,8 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        Level level = event.getLevel();
-        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), level, event.getHand(), event.getPos(), event.getFace(), isCtrlKeyDown, level.registryAccess());
+        InteractionResult result = CommonClickInteractions.onLeftClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getPos(), event.getFace(), event.getLevel().registryAccess());
         if (result == InteractionResult.CONSUME) {
-            isCtrlKeyDown = false;
             event.setCanceled(true);
         }
     }
@@ -56,10 +52,8 @@ public class FastEntityTransfer {
      */
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        Level level = event.getLevel();
-        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), level, event.getHand(), event.getHitVec(), isCtrlKeyDown, level.registryAccess());
+        InteractionResult result = CommonClickInteractions.onRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec(), event.getLevel().registryAccess());
         if (result == InteractionResult.CONSUME) {
-            isCtrlKeyDown = false;
             event.setCanceled(true);
         }
     }

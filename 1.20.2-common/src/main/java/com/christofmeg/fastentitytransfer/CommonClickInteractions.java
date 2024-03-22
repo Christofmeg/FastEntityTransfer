@@ -26,7 +26,6 @@ public class CommonClickInteractions {
      */
     public static boolean isCtrlKeyDown = false;
 
-
     // This method serves as an initialization hook for the mod. The vanilla
     // game has no mechanism to load tooltip listeners so this must be
     // invoked from a mod loader specific project like Forge or Fabric.
