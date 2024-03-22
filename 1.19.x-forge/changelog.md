@@ -1,3 +1,7 @@
-Fix [#9](https://github.com/Christofmeg/FastEntityTransfer/issues/9)
+1.3.1:
+Optimize packets
 
-Removed unused files
+1.3.0:
+Implement [#10](https://github.com/Christofmeg/FastEntityTransfer/issues/10)
+
+Keybinds

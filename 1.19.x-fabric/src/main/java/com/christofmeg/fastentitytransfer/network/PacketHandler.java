@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer.network;
 
+import com.christofmeg.fastentitytransfer.CommonClickInteractions;
 import com.christofmeg.fastentitytransfer.FastEntityTransfer;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -16,8 +17,8 @@ public class PacketHandler {
 
     private static void handle(MinecraftServer minecraftServer, ServerPlayer serverPlayer, ServerGamePacketListenerImpl serverGamePacketListener, FriendlyByteBuf buf, PacketSender packetSender) {
         boolean isCtrlKeyDown = buf.readBoolean();
-        if(isCtrlKeyDown) {
-            FastEntityTransfer.isSprintKeyDown = true;
+        if (isCtrlKeyDown) {
+            CommonClickInteractions.isCtrlKeyDown = true;
         }
     }
 

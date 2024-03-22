@@ -123,6 +123,7 @@ public class CommonUtils {
     }
 
     private static void doTransfers(ItemStack stackInHand, int burnTime, ItemStack fuelSlotStack, int stackSize, int half, AbstractFurnaceBlockEntity abstractBlockEntity, Player player, int fuelStackSize, int fuelMaxStackSize, Optional<?> recipe, ItemStack inputSlotStack, int inputSlotStackSize, int inputMaxStackSize, boolean fuelSlotHasItemStack) {
+
         //transfer nbt tags to new item stack
         ItemStack newItemStack = stackInHand.copy();
 

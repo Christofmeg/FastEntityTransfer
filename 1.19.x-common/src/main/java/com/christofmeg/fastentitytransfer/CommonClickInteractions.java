@@ -20,15 +20,21 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class CommonClickInteractions {
 
+    /**
+     * Represents the state of the control key.
+     */
+    public static boolean isCtrlKeyDown = false;
+
     // This method serves as an initialization hook for the mod. The vanilla
     // game has no mechanism to load tooltip listeners so this must be
     // invoked from a mod loader specific project like Forge or Fabric.
     public static void init() {}
 
-    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection, boolean isSprintKeyDown) {
+    public static InteractionResult onLeftClickBlock(Player player, Level level, InteractionHand hand, BlockPos pos, Direction ignoredDirection) {
         ItemStack stack = player.getItemInHand(hand);
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (!level.isClientSide() && isSprintKeyDown) {
+        if (!level.isClientSide() && isCtrlKeyDown) {
+            isCtrlKeyDown = false;
             if (blockEntity instanceof SmokerBlockEntity smokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
                 return CommonUtils.doLeftClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(smokerBlockEntity.getItem(0)), level), player, hand);
@@ -43,11 +49,12 @@ public class CommonClickInteractions {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult, boolean isSprintKeyDown) {
+    public static InteractionResult onRightClickBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         ItemStack stack = player.getItemInHand(hand);
         BlockPos pos = blockHitResult.getBlockPos();
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (!level.isClientSide() && isSprintKeyDown) {
+        if (!level.isClientSide() && isCtrlKeyDown) {
+            isCtrlKeyDown = false;
             if (blockEntity instanceof SmokerBlockEntity) {
                 RecipeType<SmokingRecipe> recipeType = RecipeType.SMOKING;
                 return CommonUtils.doRightClickInteractions(blockEntity, level.getRecipeManager().getRecipeFor(recipeType, new SimpleContainer(stack), level), player, hand);
