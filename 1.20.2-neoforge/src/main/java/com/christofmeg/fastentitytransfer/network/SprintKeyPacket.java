@@ -1,5 +1,6 @@
 package com.christofmeg.fastentitytransfer.network;
 
+import com.christofmeg.fastentitytransfer.CommonClickInteractions;
 import com.christofmeg.fastentitytransfer.FastEntityTransfer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.neoforge.network.NetworkEvent;
@@ -49,7 +50,7 @@ public class SprintKeyPacket {
     public static void handle(SprintKeyPacket packet, NetworkEvent.Context contextSupplier) {
         contextSupplier.enqueueWork(() -> {
             // Process the packet on the server-side
-            FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;
+            CommonClickInteractions.isCtrlKeyDown = packet.isSprintKeyDown;
         });
         contextSupplier.setPacketHandled(true);
     }

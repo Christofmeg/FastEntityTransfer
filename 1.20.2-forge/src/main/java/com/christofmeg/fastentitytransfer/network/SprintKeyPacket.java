@@ -1,6 +1,6 @@
 package com.christofmeg.fastentitytransfer.network;
 
-import com.christofmeg.fastentitytransfer.FastEntityTransfer;
+import com.christofmeg.fastentitytransfer.CommonClickInteractions;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
@@ -42,12 +42,12 @@ public class SprintKeyPacket {
     /**
      * Handles the received SprintKeyPacket on the server-side.
      * @param packet The received SprintKeyPacket.
-     * @param contextSupplier A supplier for obtaining the network event context.
+     * @param context A supplier for obtaining the network event context.
      */
     public static void handle(SprintKeyPacket packet, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             // Process the packet on the server-side
-            FastEntityTransfer.isCtrlKeyDown = packet.isSprintKeyDown;
+            CommonClickInteractions.isCtrlKeyDown = packet.isSprintKeyDown;
         });
         context.setPacketHandled(true);
     }

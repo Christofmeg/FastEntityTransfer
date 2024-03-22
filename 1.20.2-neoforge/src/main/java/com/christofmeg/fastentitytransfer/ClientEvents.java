@@ -2,11 +2,20 @@ package com.christofmeg.fastentitytransfer;
 
 import com.christofmeg.fastentitytransfer.network.PacketHandler;
 import com.christofmeg.fastentitytransfer.network.SprintKeyPacket;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
@@ -17,6 +26,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 @Mod.EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 
+    private static KeyMapping fastEntityTransferKey;
+
     /**
      * Event handler for the LeftClickBlock event on the client-side.
      * Sends a sprint key packet to the server if the sprint key is pressed.
@@ -25,8 +36,19 @@ public class ClientEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = level.getBlockState(pos);
+        Block block = state.getBlock();
+        if (block instanceof AbstractFurnaceBlock && !CommonClickInteractions.isCtrlKeyDown) {
+            if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            } else if (fastEntityTransferKey.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            } else {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(false));
+            }
+        }
     }
 
     /**
@@ -37,7 +59,24 @@ public class ClientEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        boolean isCtrlKeyDown = Minecraft.getInstance().options.keySprint.isDown();
-        PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(isCtrlKeyDown));
+        Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = level.getBlockState(pos);
+        Block block = state.getBlock();
+        if (block instanceof AbstractFurnaceBlock && !CommonClickInteractions.isCtrlKeyDown) {
+            if (fastEntityTransferKey.isDefault() && Minecraft.getInstance().options.keySprint.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            } else if (fastEntityTransferKey.isDown()) {
+                PacketHandler.CHANNEL.sendToServer(new SprintKeyPacket(true));
+            }
+        }
     }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public static void init(RegisterKeyMappingsEvent event) {
+        fastEntityTransferKey = new KeyMapping("key.fastentitytransfer", KeyConflictContext.IN_GAME, InputConstants.getKey("key.keyboard.left.control"), "key.fastentitytransfer");
+        event.register(fastEntityTransferKey);
+    }
+
 }

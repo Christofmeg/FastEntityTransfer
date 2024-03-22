@@ -1,4 +1,5 @@
 plugins {
+    id 'idea'
     id 'net.minecraftforge.gradle' version '6.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
