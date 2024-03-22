@@ -1,0 +1,44 @@
+plugins {
+    id "dev.architectury.loom" version "0.12.0-SNAPSHOT"
+}
+
+platformInfo {
+    platform = 'Forge'
+    versionsForCurseForgeAndModrinth = [ '1.16.5' ]
+    supportedVersions = '1.16.5'
+}
+
+repositories {
+}
+
+loom {
+    silentMojangMappingsLicense()
+
+    runs {
+        client {
+            runDir './run-client'
+        }
+
+        server {
+            runDir './run-server'
+        }
+
+        configureEach {
+            ideConfigGenerated(true)
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.16.5"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.16.5:2022.03.06@zip")
+    }
+    forge "net.minecraftforge:forge:1.16.5-36.2.34"
+    compileOnly project(":1.16.x-common")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 8
+}

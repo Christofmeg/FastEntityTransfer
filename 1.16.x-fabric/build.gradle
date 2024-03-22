@@ -1,0 +1,55 @@
+plugins {
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'io.github.juuxel.loom-quiltflower' version '1.7.1'
+}
+
+platformInfo {
+    platform = 'Fabric'
+    versionsForCurseForgeAndModrinth = [ '1.16.4', '1.16.5' ]
+    supportedVersions = '1.16.x'
+}
+
+loom {
+    runs {
+        client {
+            runDir 'run'
+        }
+
+        server {
+            runDir 'run'
+        }
+
+        gameTest {
+            server()
+            vmArg "-Dfabric-api.gametest=1"
+        }
+
+        datagen {
+            client()
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.modid=fastentitytransfer"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("./src/generated/resources")}"
+        }
+
+        configureEach {
+            ideConfigGenerated(true)
+        }
+    }
+}
+
+repositories {
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.16.5"
+    mappings loom.layered() {
+        officialMojangMappings()
+    }
+    modImplementation "net.fabricmc:fabric-loader:0.14.24"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.42.0+1.16"
+    compileOnly project(":1.16.x-common")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 8
+}
